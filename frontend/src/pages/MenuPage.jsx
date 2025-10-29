@@ -7,7 +7,7 @@ import AddCategoryForm from "./Restaurant/AddCategoryForm.jsx";
 import EditCategoryForm from "./Restaurant/EditCategoryForm.jsx";
 import AddMenuItem from "./AddMenuItem.jsx";
 import EditMenuItem from "./Restaurant/EditMenuItem.jsx";
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.jsx";
+import { capitalizeFirstLetter } from "../utils/CapitalizeFirstLetter.js";
 
 const MenuPage = () => {
   const [categories, setCategories] = useState([]);
