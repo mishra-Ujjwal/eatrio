@@ -1,8 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const storedOwner = localStorage.getItem("ownerData")
-  ? JSON.parse(localStorage.getItem("ownerData"))
-  : null;
+// ✅ Safely read and parse localStorage
+let storedOwner = null;
+try {
+  const data = localStorage.getItem("ownerData");
+  if (data && data !== "undefined" && data !== "null") {
+    storedOwner = JSON.parse(data);
+  }
+} catch (error) {
+  console.error("Error parsing ownerData from localStorage:", error);
+  localStorage.removeItem("ownerData"); // clear corrupted value
+}
 
 const ownerSlice = createSlice({
   name: "owner",

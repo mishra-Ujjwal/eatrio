@@ -19,6 +19,7 @@ export const useGetOwner = () => {
         console.log("Error fetching owner:", err);
       }
     };
+
     fetchOwner();
   }, [dispatch]);
 };
