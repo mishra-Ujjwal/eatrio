@@ -9,4 +9,5 @@ const uploadRoutes = express.Router();
 // POST /api/upload
 uploadRoutes.post("/", upload.single("image"), uploadImage);
 
+
 export default uploadRoutes;

@@ -4,10 +4,10 @@ const RestaurantSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: String,
   image: String,
-  location: {
-    type: { type: String, enum: ['Point'], default: 'Point' },
-    coordinates: { type: [Number], required: true } // [longitude, latitude]
-  },
+  // location: {
+  //   type: { type: String, enum: ['Point'], default: 'Point' },
+  //   coordinates: { type: [Number] } // [longitude, latitude]
+  // },
   address:String,
   menu: [{ type: mongoose.Schema.Types.ObjectId, ref: "MenuItem" }],
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "Owner" },
@@ -17,6 +17,6 @@ const RestaurantSchema = new mongoose.Schema({
 });
 
 // Geospatial index for nearby queries
-RestaurantSchema.index({ location: '2dsphere' });
+// RestaurantSchema.index({ location: '2dsphere' });
 
 export default mongoose.model("Restaurant", RestaurantSchema);

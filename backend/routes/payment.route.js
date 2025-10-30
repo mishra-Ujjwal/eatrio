@@ -67,46 +67,39 @@ paymentRouter.post("/verify-payment", async (req, res) => {
     await owner.save();
 
     // ✅ Create restaurant only if not already created
-const existingRestaurant = await Restaurant.findOne({ owner: owner._id });
+    const existingRestaurant = await Restaurant.findOne({ owner: owner._id });
 
-let restaurant;
-if (!existingRestaurant) {
-  restaurant = new Restaurant({
-    name: ownerData.restaurantName,
-    description: ownerData.description,
-    image: ownerData.image,
-    location: {
-      type: "Point",
-      coordinates: [
-        parseFloat(ownerData.longitude),
-        parseFloat(ownerData.latitude),
-      ],
-    },
-    owner: owner._id,
-  });
-  await restaurant.save();
+    let restaurant;
+    if (!existingRestaurant) {
+      restaurant = new Restaurant({
+        name: ownerData.restaurantName,
+        description: ownerData.description,
+        image: ownerData.image,
+        owner: owner._id,
+      });
 
-  // Link to owner
-  owner.restaurant = restaurant._id;
-  await owner.save();
-} else {
-  restaurant = existingRestaurant;
-}
+      await restaurant.save();
 
+      // Link restaurant to owner
+      owner.restaurant = restaurant._id;
+      await owner.save();
+    } else {
+      restaurant = existingRestaurant;
+    }
 
     res.status(200).json({
-  success: true,
-  message: "Payment verified successfully! Subscription activated and restaurant registered.",
-  owner: {
-    id: owner._id,
-    name: owner.name,
-    email: owner.email,
-    subscription: owner.subscription,
-    restaurant: owner.restaurant,
-  },
-  restaurant,
-});
-
+      success: true,
+      message:
+        "Payment verified successfully! Subscription activated and restaurant registered.",
+      owner: {
+        id: owner._id,
+        name: owner.name,
+        email: owner.email,
+        subscription: owner.subscription,
+        restaurant: owner.restaurant,
+      },
+      restaurant,
+    });
   } catch (err) {
     console.error("Payment verification failed:", err);
     res.status(500).json({
