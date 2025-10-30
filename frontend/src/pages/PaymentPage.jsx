@@ -68,7 +68,7 @@ const Payment = () => {
           <option value="monthly">Monthly - ₹499</option>
           <option value="yearly">Yearly - ₹4999</option>
         </select>
-        <button onClick={handlePayment} disabled={loading} className="w-full bg-[#FF4B3E] text-white py-3 rounded-lg">
+        <button onClick={handlePayment} disabled={loading} className="w-full !bg-green-800 text-white py-3 rounded-lg">
           {loading ? "Processing..." : "Pay Now"}
         </button>
         {message && <p className="text-center text-gray-700">{message}</p>}

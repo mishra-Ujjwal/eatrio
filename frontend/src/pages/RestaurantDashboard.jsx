@@ -26,6 +26,13 @@ const RestaurantDashboard = () => {
   const restaurant = owner?.restaurant || {};
   const restaurantId = restaurant?._id || restaurant?.id || "";
 
+if (!restaurantId) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p className="text-gray-500 text-lg">Loading dashboard...</p>
+    </div>
+  );
+}
   // ✅ Logout
   const handleLogout = async () => {
     try {

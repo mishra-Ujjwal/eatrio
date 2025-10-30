@@ -95,7 +95,7 @@ const RestaurantRegister = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#FF4B3E] text-white py-3 rounded-lg"
+          className="w-full !bg-green-800 text-white py-3 rounded-lg"
         >
           {loading ? "Saving..." : "Proceed to Payment"}
         </button>
