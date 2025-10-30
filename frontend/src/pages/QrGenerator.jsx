@@ -2,7 +2,7 @@ import React from "react";
 import { QRCodeCanvas } from "qrcode.react";
 
 const QrStyled = () => {
-  const qrValue = "https://eatrio.onrender.com";
+  const qrValue = "https://eatrio.onrender.com/login";
 
   return (
     <div className="relative inline-block">
