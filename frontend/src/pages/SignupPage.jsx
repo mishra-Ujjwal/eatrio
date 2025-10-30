@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
   const [form, setForm] = useState({
@@ -14,7 +15,7 @@ const SignupPage = () => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+  const navigate = useNavigate()
   const handleSignup = async(e) => {
     e.preventDefault();
     console.log("working")
@@ -24,7 +25,7 @@ const SignupPage = () => {
             email:form.email,
             password:form.password,
         })
-        console.log(result)
+        navigate("/user-dashboard")
     }catch(err){
         console.log(err)
     }
@@ -32,11 +33,11 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="">
-      <div className=" bg-white">
+    <div className="px-8">
+      <div className=" bg-white mt-12">
         {/* Illustration */}
         <div className="flex flex-col items-center mb-8">
-          <img src="/logo.png" alt="" className="w-30" />
+          <img src="/logo1.png" alt="" className="w-25" />
           <h2 className="text-xl mt-4 font-semibold text-slate-800">Sign Up</h2>
         </div>
         <form onSubmit={handleSignup}>
@@ -106,7 +107,7 @@ const SignupPage = () => {
           
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-blue-600 text-white font-medium text-lg hover:bg-blue-700 transition mb-6"
+            className="w-full py-2 rounded-lg !bg-green-600 text-white font-medium text-lg hover:bg-blue-700 transition mb-6"
           >
             Sign Up
           </button>
@@ -150,11 +151,11 @@ const SignupPage = () => {
           </button>
         </div>
         {/* Footer text */}
-        <div className="text-center text-slate-500 text-sm">
+        <div className="text-center text-slate-500 text-sm pb-4">
           Already have an account?{" "}
           <a
             href="/login"
-            className="text-blue-600 font-semibold hover:underline"
+            className="!text-green-600 font-semibold hover:underline"
           >
             Sign In
           </a>

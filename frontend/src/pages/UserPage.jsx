@@ -58,6 +58,7 @@ const UserPage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen pt-16">
+      
       {/* Carousel */}
       <div className="px-4">
         <div className="relative rounded-xl overflow-hidden shadow-lg">

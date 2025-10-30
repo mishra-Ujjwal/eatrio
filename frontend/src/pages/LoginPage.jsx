@@ -2,23 +2,25 @@ import axios from "axios";
 import React, { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ email: "user@eatrio.com", password: "user123" });
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate()
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleLogin = async(e) => {
     e.preventDefault();
-    console.log("working")
+
     try{
         const result = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/sign-in`,{
             email:form.email,
             password:form.password,
-        })
-        console.log(result)
+        },{withCredentials:true})
+        navigate("/user-dashboard")
+
     }catch(err){
         console.log(err)
     }
@@ -26,11 +28,11 @@ const LoginPage = () => {
 
   return (
     <div className="">
-      <div className=" bg-white">
+      <div className="px-8 mt-12 bg-white">
 
         <div className="flex flex-col items-center mb-8">
           {/* Replace with your EatRio logo */}
-          <img src="/logo.png" alt="" className="w-30" />
+          <img src="/logo1.png" alt="" className="w-25" />
           <h2 className="text-xl mt-4 font-semibold text-slate-800">Sign In</h2>
         </div>
         <form onSubmit={handleLogin}>
@@ -87,17 +89,17 @@ const LoginPage = () => {
             </div>
           </div>
           <div className="text-right mb-6">
-            <button
+            <div
               type="button"
-              className="text-blue-600 text-sm hover:underline focus:outline-none"
-              onClick={() => alert("Forgot password flow")}
+              className="text-blue-600 pt-2 text-sm hover:underline focus:outline-none"
+
             >
               Forget password
-            </button>
+            </div>
           </div>
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-blue-600 text-white font-medium text-lg hover:bg-blue-700 transition mb-6"
+            className="w-full py-3 rounded-lg !bg-green-600 text-white font-medium text-lg hover:bg-blue-700 transition mb-6"
           >
             Login
           </button>
@@ -141,11 +143,11 @@ const LoginPage = () => {
           </button>
         </div>
         {/* Footer text */}
-        <div className="text-center text-slate-500 text-sm">
+        <div className="text-center text-slate-500 text-sm pb-4">
           Haven’t any account?{" "}
           <a
             href="/signup"
-            className="text-blue-600 font-semibold hover:underline"
+            className="!text-green-600 font-semibold hover:underline"
           >
             Sign up
           </a>

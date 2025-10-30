@@ -1,40 +1,81 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { RiMenu3Line } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+
 const Header = () => {
-  
+  const [activeSection, setActiveSection] = useState("");
+
+  // Smooth scroll to section
+  const handleScroll = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+      setActiveSection(id);
+    }
+  };
+
   return (
-    <header className="bg-white fixed z-50 shadow-md w-screen py-1  lg:px-20 px-6 md:px-8 flex items-center justify-between">
+    <header className="bg-white fixed top-0 left-0 z-50 shadow-sm w-full py-2 lg:px-20 px-6 md:px-8 flex items-center justify-between">
       {/* Logo */}
-      <a href="/"><div className="">
-        <img src="/logo1.png" alt="EatRio Logo" className="h-16 "  />
-      </div></a>
+      <div>
+        <img src="/logo1.png" alt="EatRio Logo" className="h-16" />
+      </div>
+
       {/* Navigation */}
       <nav>
-        <ul className="hidden md:flex space-x-6 text-gray-700 font-medium">
+        <ul className="hidden md:flex space-x-8 text-gray-800 font-medium">
           <li>
-            <a href="/" className="hover:text-green-600 transition">
+            <div
+              onClick={() => handleScroll("home")}
+              className={`transition cursor-pointer ${
+                activeSection === "home"
+                  ? "text-green-600 font-semibold"
+                  : "text-black hover:text-green-600"
+              }`}
+            >
               Home
-            </a>
+            </div>
           </li>
           <li>
-            <a href="/menu" className="hover:text-green-600 transition">
-              Menu
-            </a>
+            <div
+              onClick={() => handleScroll("features")}
+              className={`transition cursor-pointer ${
+                activeSection === "features"
+                  ? "text-green-600 font-semibold"
+                  : "text-black hover:text-green-600"
+              }`}
+            >
+              Features
+            </div>
           </li>
           <li>
-            <a href="/about" className="hover:text-green-600 transition">
-              About
-            </a>
+            <div
+              onClick={() => handleScroll("pricing")}
+              className={`transition cursor-pointer ${
+                activeSection === "pricing"
+                  ? "text-green-600 font-semibold"
+                  : "text-black hover:text-green-600"
+              }`}
+            >
+              Pricing
+            </div>
           </li>
           <li>
-            <a href="/contact" className="hover:text-green-600 transition">
+            <div
+              onClick={() => handleScroll("contact")}
+              className={`transition cursor-pointer ${
+                activeSection === "contact"
+                  ? "text-green-600 font-semibold"
+                  : "text-black hover:text-green-600"
+              }`}
+            >
               Contact
-            </a>
+            </div>
           </li>
         </ul>
+
+        {/* Mobile Menu Icon */}
         <div className="md:hidden cursor-pointer">
-        <RiMenu3Line size={23} />
+          <RiMenu3Line size={23} />
         </div>
       </nav>
     </header>

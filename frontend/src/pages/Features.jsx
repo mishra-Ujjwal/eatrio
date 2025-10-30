@@ -35,11 +35,15 @@ const features = [
 
 const Features = () => (
   <div className="bg-gray-50 py-12 px-6">
-    <div>
-        <h2>Everything You Need to Succeed</h2>
-        <p>Streamline your food court operations with our comprehensive digital ordering platform</p>
+    
+    <div className="text-center">
+       <h2 style={{ fontSize: "2.5rem", fontWeight: 700, marginBottom: 8 }}>Everything You Need to Succeed</h2>
+    <p style={{ fontSize: 22, color: "#4a5568", marginBottom: 48 }}>
+      Streamline your food court operations with our comprehensive digital ordering platform
+    </p>
+   
     </div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto pt-8">
       {features.map((feature, idx) => (
         <div
           key={idx}

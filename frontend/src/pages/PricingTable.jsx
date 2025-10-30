@@ -80,7 +80,7 @@ const PricingCard = ({ plan }) => (
 );
 
 const PricingTable = () => (
-  <section className="w-full py-16 px-4 bg-white flex justify-center items-center min-h-screen">
+  <section className=" w-full py-16 px-4 bg-white flex justify-center items-center min-h-screen">
     <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-6 px-2 lg:px-0 max-w-4xl">
       {plans.map((plan, idx) => (
         <PricingCard key={idx} plan={plan} />

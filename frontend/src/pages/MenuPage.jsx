@@ -138,12 +138,12 @@ const MenuPage = () => {
           <h2 className="text-3xl font-bold text-gray-800">Menu Categories</h2>
           <p className="text-gray-500">Manage your restaurant’s menu</p>
         </div>
-        <button
+        <div
           onClick={() => setShowAddCategory(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+          className="flex items-center gap-2 !bg-blue-600 text-white px-2  text-center py-2 rounded-lg shadow hover:bg-blue-700 transition"
         >
-          <IoIosAdd className="text-xl" /> Add Category
-        </button>
+       Add Category
+        </div>
       </div>
 
       {/* Category List */}
@@ -188,8 +188,8 @@ const MenuPage = () => {
               <h2 className="text-2xl font-bold text-gray-800">{capitalizeFirstLetter(selectedCategory.name)} Items</h2>
               <p className="text-gray-500">Manage all items in this category</p>
             </div>
-            <button onClick={() => setShowAddItem(true)} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
-              <IoIosAdd className="text-xl" /> Add Item
+            <button onClick={() => setShowAddItem(true)} className="flex items-center gap-2 !bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+              Add Item
             </button>
           </div>
 

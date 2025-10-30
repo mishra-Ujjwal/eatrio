@@ -17,7 +17,7 @@ function App() {
   return (
     <section className="flex min-h-screen">
       <Header />
-      <section className="w-screen">
+      <section className=" w-screen">
         {isLoggedIn ? <UserPage /> : <OwnerLandingPage />}
       </section>
     </section>

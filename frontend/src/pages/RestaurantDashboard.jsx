@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 import { useGetOwner } from "../../hooks/useGetOwner.jsx";
-import { setOwnerData } from "../redux/ownerSlice";
+import { clearOwnerData } from "../redux/ownerSlice";
 import RestaurantHeader from "./Restaurant/RestaurantHeader";
 
 const RestaurantDashboard = () => {
@@ -33,8 +33,8 @@ const RestaurantDashboard = () => {
         {},
         { withCredentials: true }
       );
-      dispatch(setOwnerData(null));
-      navigate("/owner-login");
+      dispatch(clearOwnerData());
+      navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -73,7 +73,7 @@ const RestaurantDashboard = () => {
     <section className="min-h-screen w-screen flex relative bg-gray-50">
       {/* Sidebar (Desktop) */}
       <aside className="md:w-1/4 sm:w-1/3 bg-red-400 hidden sm:block">
-        <RestaurantHeader />
+        <RestaurantHeader restaurantId={restaurantId} />
       </aside>
 
       {/* Mobile Navbar */}

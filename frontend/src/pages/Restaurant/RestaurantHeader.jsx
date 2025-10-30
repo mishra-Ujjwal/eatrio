@@ -4,17 +4,17 @@ import { MdSpaceDashboard, MdOutlineBorderColor, MdPrivacyTip } from "react-icon
 import { LuSquareMenu } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 
-const RestaurantHeader = () => {
+const RestaurantHeader = ({restaurantId}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   // Define navigation items with paths
   const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: <MdSpaceDashboard />, path: "/restaurant-dashboard" },
-    { id: "menu", label: "Menu", icon: <LuSquareMenu />, path: "/restaurant-dashboard/menu" },
-    { id: "orders", label: "Orders", icon: <MdOutlineBorderColor />, path: "/restaurant-dashboard/orders" },
+    { id: "dashboard", label: "Dashboard", icon: <MdSpaceDashboard />, path: `/restaurant-dashboard/${restaurantId}` },
+    { id: "menu", label: "Menu", icon: <LuSquareMenu />, path: `/restaurant-dashboard/${restaurantId}/menu` },
+    { id: "orders", label: "Orders", icon: <MdOutlineBorderColor />, path: `/restaurant-dashboard/${restaurantId}/orders` },
 
-    { id: "profile", label: "Profile", icon: <CgProfile />, path: "/restaurant-dashboard/profile" },
+    { id: "profile", label: "Profile", icon: <CgProfile />, path: `/restaurant-dashboard/${restaurantId}/profile` },
   ];
 
   const activePath = location.pathname;

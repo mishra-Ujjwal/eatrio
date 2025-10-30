@@ -4,6 +4,8 @@ import TestimonialSection from "./TestimonialSection";
 import PricingTable from "./PricingTable";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
+import QrGenerator from "./QrGenerator";
+import ContactForm from "./ContactForm";
 
 const orders = [
   {
@@ -27,10 +29,10 @@ const Hero = () => {
   return (
   <section className="flex flex-col md:flex-row gap-8 min-h-[calc(100vh-80px)] sm:px-16 px-6 py-12 bg-[#F8F9FA] mt-15 text-[#212529]">
     {/* Left Side */}
-    <div className="flex-1 flex flex-col justify-center text-green-800">
+    <div className="flex-1 flex  flex-col justify-center text-green-800">
       <h2 className="text-5xl font-bold leading-tight mb-2">
         Manage Your Food<br />
-        Court Orders Smartly <span role="img" aria-label="Rocket">🚀</span><br />
+        Court Orders Smartly
 
       </h2>
       <p className="mt-4 mb-8 text-xl max-w-lg font-medium text-[#212529]">
@@ -38,12 +40,10 @@ const Hero = () => {
         Transform your restaurant operations with our smart digital ordering system.
       </p>
       <div className="flex items-center gap-6">
-        <button className="!bg-green-800   text-white font-bold text-xl py-3 px-8 outline-none rounded-full shadow-md hover:!bg-green-700 transition" onClick={()=>navigate("/owner-signup")}>
-          Get Started Free
+        <button className="!bg-green-800   text-white font-bold text-xl py-3 px-8 outline-none rounded-full shadow-md hover:!bg-green-700 transition" onClick={()=>navigate("/owner-login")}>
+          Register Your Restaurant
         </button>
-        <button className="border-2 border-white font-bold text-lg text-white bg-transparent py-3 px-8 rounded-full hover:bg-white hover:text-orange-500 transition">
-          Watch Demo
-        </button>
+       
       </div>
     </div>
     {/* Right Side - Dashboard Card */}
@@ -51,17 +51,10 @@ const Hero = () => {
       <div className="bg-white rounded-xl p-8 flex flex-col items-center shadow-lg mb-3">
         <div className="text-xl font-semibold text-gray-700 mb-6">Table 12 - Scan to Order</div>
         {/* Placeholder for QR or Icon */}
-        <div className="bg-gray-900 rounded-md flex items-center justify-center p-8">
-          {/* Replace with actual QR or icon */}
-          <svg width="64" height="64" viewBox="0 0 64 64">
-            <rect x="8" y="8" width="14" height="14" fill="#fff" />
-            <rect x="42" y="8" width="14" height="14" fill="#fff" />
-            <rect x="8" y="42" width="14" height="14" fill="#fff" />
-            <rect x="32" y="32" width="6" height="6" fill="#fff" />
-            <rect x="50" y="50" width="4" height="4" fill="#fff" />
-            <rect x="32" y="50" width="4" height="4" fill="#fff" />
-            <rect x="50" y="32" width="4" height="4" fill="#fff" />
-          </svg>
+        Scan This Qr code to login as User
+        <div className="bg-gray-900 rounded-md flex items-center justify-center ">
+           
+          <QrGenerator/>
         </div>
       </div>
       {/* Orders Dashboard */}
@@ -110,11 +103,20 @@ const OwnerLandingPage = () => {
 
   return(
   <div className="min-h-screen w-screen font-sans bg-gray-100">
-    
+ <section id="home">
     <Hero />
-    <Features/>
-    <TestimonialSection/>
-    <PricingTable/>
+  </section>
+  <section id="features">
+    <Features />
+  </section>
+  <section id="pricing">
+    <PricingTable />
+  </section>
+  <section id="contact">
+    <ContactForm />
+  </section>
+    
+
   </div>)
 };
 
