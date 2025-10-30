@@ -11,6 +11,7 @@ import axios from "axios";
 import { useGetOwner } from "../../hooks/useGetOwner.jsx";
 import { clearOwnerData } from "../redux/ownerSlice";
 import RestaurantHeader from "./Restaurant/RestaurantHeader";
+import { capitalizeFirstLetter } from "../utils/CapitalizeFirstLetter.js";
 
 const RestaurantDashboard = () => {
   const navigate = useNavigate();
@@ -79,9 +80,9 @@ const RestaurantDashboard = () => {
       {/* Mobile Navbar */}
       <nav className="sm:hidden flex items-center justify-between fixed top-0 w-full bg-white shadow-lg py-2 px-3 z-50">
         <div className="flex items-center gap-3">
-          <img src="/dominos.png" alt="Logo" className="h-10" />
+          <img src={restaurant?.image} alt="Logo" className="h-13 rounded-full" />
           <div className="text-lg font-bold">
-            {restaurant?.name || "Restaurant"}
+            {capitalizeFirstLetter(restaurant?.name) || "Restaurant"}
           </div>
         </div>
 

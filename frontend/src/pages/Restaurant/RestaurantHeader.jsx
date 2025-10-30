@@ -16,7 +16,7 @@ const RestaurantHeader = ({restaurantId}) => {
 
     { id: "profile", label: "Profile", icon: <CgProfile />, path: `/restaurant-dashboard/${restaurantId}/profile` },
   ];
-
+   
   const activePath = location.pathname;
 
   return (

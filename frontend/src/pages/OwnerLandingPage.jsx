@@ -73,9 +73,9 @@ const Hero = () => {
               </div>
             </div>
             {order.status === "new" ? (
-              <button className="bg-orange-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-orange-600 transition">
+              <div className="!bg-orange-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-orange-600 transition">
                 Accept
-              </button>
+              </div>
             ) : (
               <span className="bg-yellow-100 text-yellow-700 font-semibold px-5 py-2 rounded-full">Preparing</span>
             )}

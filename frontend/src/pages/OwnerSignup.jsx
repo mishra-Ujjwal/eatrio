@@ -32,11 +32,11 @@ const OwnerSignup = () => {
         <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required className="w-full p-3 border rounded-lg"/>
         <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required className="w-full p-3 border rounded-lg"/>
         <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required className="w-full p-3 border rounded-lg"/>
-        <button type="submit" disabled={loading} className="w-full bg-[#FF4B3E] text-white py-3 rounded-lg">
+        <button type="submit" disabled={loading} className="w-full !bg-green-600 text-white py-3 rounded-lg">
           {loading ? "Signing up..." : "Signup"}
         </button>
         {message && <p className="text-red-500 text-center">{message}</p>}
-        <p className="cursor-pointer hover:text-blue-400" onClick={()=>{navigate("/owner-login")}}>Already have an account? Login</p>
+        <p className="cursor-pointer hover:text-blue-400" onClick={()=>{navigate("/owner-login")}}>Already have an account? <span className="text-blue-600">Login</span></p>
       </form>
     </div>
   );

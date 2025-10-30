@@ -38,6 +38,7 @@ const MenuPage = () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/menu/getcategory/${restaurantId}`);
       setCategories(res.data.categories || []);
+      setSelectedCategory(res.data.categories[0])
     } catch (error) {
       console.error("Error fetching categories:", error);
     } finally {
@@ -140,7 +141,7 @@ const MenuPage = () => {
         </div>
         <div
           onClick={() => setShowAddCategory(true)}
-          className="flex items-center gap-2 !bg-blue-600 text-white px-2  text-center py-2 rounded-lg shadow hover:bg-blue-700 transition"
+          className="flex items-center gap-2 !bg-green-800 text-white px-2  text-center py-2 rounded-lg shadow hover:bg-blue-700 transition"
         >
        Add Category
         </div>
@@ -160,11 +161,11 @@ const MenuPage = () => {
               <div
                 key={cat._id}
                 onClick={() => handleCategoryClick(cat)}
-                className={`min-w-[220px] relative flex-shrink-0 p-4 rounded-xl border transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md ${
+                className={`min-w-[180px] relative flex-shrink-0 p-4 rounded-xl border transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md ${
                   selectedCategory?._id === cat._id ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white"
                 }`}
               >
-                <img src={cat.image} alt={cat.name} className="w-40 h-40 rounded-lg object-cover mb-3" />
+                <img src={cat.image} alt={cat.name} className="w-30 h-30 rounded-lg object-cover mb-3" />
                 <p className="text-2xl font-semibold text-gray-800">{capitalizeFirstLetter(cat.name)}</p>
 
                 <div className="absolute top-3 right-3 flex flex-col gap-2">
@@ -188,7 +189,7 @@ const MenuPage = () => {
               <h2 className="text-2xl font-bold text-gray-800">{capitalizeFirstLetter(selectedCategory.name)} Items</h2>
               <p className="text-gray-500">Manage all items in this category</p>
             </div>
-            <button onClick={() => setShowAddItem(true)} className="flex items-center gap-2 !bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+            <button onClick={() => setShowAddItem(true)} className="flex items-center gap-2 !bg-green-800 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
               Add Item
             </button>
           </div>

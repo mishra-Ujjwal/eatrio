@@ -37,10 +37,11 @@ const Payment = () => {
               ownerData: { ...restaurantData, subscriptionPlan: plan, ownerId },
             }
           );
+          console.log(verifyRes.data)
           setMessage(verifyRes.data.message);
           localStorage.removeItem("restaurantData");
           localStorage.removeItem("ownerId");
-          navigate("/restaurant-dashboard"); // redirect to dashboard
+          navigate(`/restaurant-dashboard/${verifyRes.data?.restaurant?._id}`); // redirect to dashboard
         },
         prefill: {
           name: restaurantData.restaurantName,

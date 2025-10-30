@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const plans = [
   {
@@ -45,7 +46,9 @@ const plans = [
   }
 ];
 
-const PricingCard = ({ plan }) => (
+const PricingCard = ({ plan }) => {
+  const navigate = useNavigate();
+  return(
   <div className={
       `relative flex flex-col rounded-2xl shadow-lg p-8 mx-2 mb-4 lg:mb-0 w-full max-w-sm
       ${plan.highlighted ? 'bg-orange-600 text-white z-10 scale-105' : 'bg-white text-gray-900 border border-gray-200'}
@@ -72,12 +75,13 @@ const PricingCard = ({ plan }) => (
     <button className={
       `font-bold text-lg py-3 w-full rounded-full transition 
        ${plan.highlighted ? 'bg-white text-orange-600 border-2 border-white hover:bg-orange-100 hover:text-orange-700' 
-                          : 'border-2 border-orange-600 text-orange-600 bg-white hover:bg-orange-600 hover:text-white'}`
-    }>
+                          : 'border-2 border-orange-600 text-orange-600 bg-white hover:!bg-orange-600 hover:text-white'}`
+    }onClick={()=>{navigate("/owner-signup")}}>
       {plan.button}
     </button>
   </div>
-);
+)}
+;
 
 const PricingTable = () => (
   <section className=" w-full py-16 px-4 bg-white flex justify-center items-center min-h-screen">

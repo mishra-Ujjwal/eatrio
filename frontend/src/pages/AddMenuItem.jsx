@@ -15,6 +15,7 @@ const AddMenuItem = ({ categoryId }) => {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,8 +52,16 @@ const AddMenuItem = ({ categoryId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setError("");
     setMessage("");
+
+    // ✅ Image validation
+    if (!formData.image) {
+      setError("Please upload a main image before submitting.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const data = new FormData();
@@ -60,9 +69,8 @@ const AddMenuItem = ({ categoryId }) => {
       data.append("description", formData.description);
       data.append("price", formData.price);
       data.append("category", formData.category);
-      if (formData.image) data.append("image", formData.image);
+      data.append("image", formData.image);
 
-      // Filter out empty addons
       const validAddons = formData.addons.filter(
         (addon) => addon.title.trim() !== "" && addon.price !== ""
       );
@@ -82,8 +90,6 @@ const AddMenuItem = ({ categoryId }) => {
       );
 
       setMessage(res.data.message);
-
-      // Reset form
       setFormData({
         name: "",
         description: "",
@@ -94,7 +100,7 @@ const AddMenuItem = ({ categoryId }) => {
       });
     } catch (err) {
       console.error(err);
-      setMessage(err.response?.data?.message || "Failed to add menu item");
+      setError(err.response?.data?.message || "Failed to add menu item");
     } finally {
       setLoading(false);
     }
@@ -102,8 +108,12 @@ const AddMenuItem = ({ categoryId }) => {
 
   return (
     <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold text-green-700 mb-4 text-center">Add Menu Item</h2>
-      {message && <p className="text-center mb-4">{message}</p>}
+      <h2 className="text-2xl font-bold text-green-700 mb-4 text-center">
+        Add Menu Item
+      </h2>
+
+      {error && <p className="text-center text-red-500 mb-3">{error}</p>}
+      {message && <p className="text-center text-green-600 mb-3">{message}</p>}
 
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
         <input
@@ -115,6 +125,7 @@ const AddMenuItem = ({ categoryId }) => {
           required
           className="w-full border p-2 rounded-lg"
         />
+
         <textarea
           name="description"
           placeholder="Description"
@@ -122,6 +133,7 @@ const AddMenuItem = ({ categoryId }) => {
           onChange={handleChange}
           className="w-full border p-2 rounded-lg"
         />
+
         <input
           type="number"
           name="price"
@@ -133,7 +145,7 @@ const AddMenuItem = ({ categoryId }) => {
         />
 
         <div>
-          <label>Main Image:</label>
+          <label className="font-medium">Main Image:</label>
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </div>
 
@@ -163,19 +175,31 @@ const AddMenuItem = ({ categoryId }) => {
                   onChange={(e) => handleAddonImageChange(index, e.target.files[0])}
                 />
                 {formData.addons.length > 1 && (
-                  <button type="button" className="text-red-500 text-sm" onClick={() => removeAddon(index)}>
+                  <button
+                    type="button"
+                    className="text-red-500 text-sm"
+                    onClick={() => removeAddon(index)}
+                  >
                     Remove Addon
                   </button>
                 )}
               </div>
             ))}
-            <button type="button" onClick={addAddon} className="text-green-600 text-sm mt-2">
+            <button
+              type="button"
+              onClick={addAddon}
+              className="text-green-600 text-sm mt-2"
+            >
               + Add Another Addon
             </button>
           </div>
         )}
 
-        <button type="submit" disabled={loading} className="w-full bg-green-600 text-white py-2 rounded-lg">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-600 text-white py-2 rounded-lg"
+        >
           {loading ? "Adding..." : "Add Item"}
         </button>
       </form>

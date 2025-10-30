@@ -74,7 +74,7 @@ const OwnerLogin = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#FF4B3E] hover:bg-[#e13c32] text-white py-3 rounded-lg font-semibold transition-all"
+          className="w-full !bg-green-600 hover:bg-[#e13c32] text-white py-3 rounded-lg font-semibold transition-all"
         >
           {loading ? "Logging in..." : "Login"}
         </button>
@@ -86,7 +86,7 @@ const OwnerLogin = () => {
         <p className="text-center text-gray-600 text-sm mt-4">
           Don't have an account?{" "}
           <span
-            className="text-orange-500 cursor-pointer"
+            className="text-green-500 cursor-pointer"
             onClick={() => navigate("/owner-signup")}
           >
             Sign up
