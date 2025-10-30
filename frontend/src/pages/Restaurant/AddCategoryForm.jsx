@@ -88,7 +88,7 @@ const AddCategoryForm = ({ restaurantId,close }) => {
           type="submit"
           disabled={loading}
           className={`${
-            loading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
+            loading ? "bg-gray-400" : "!bg-green-500 hover:!bg-green-600"
           } text-white px-4 py-2 rounded transition`}
         >
           {loading ? "Adding..." : "Add Category"}

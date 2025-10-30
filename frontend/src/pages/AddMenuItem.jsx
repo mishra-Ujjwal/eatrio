@@ -198,7 +198,7 @@ const AddMenuItem = ({ categoryId }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-green-600 text-white py-2 rounded-lg"
+          className="w-full !bg-green-600 text-white py-2 rounded-lg"
         >
           {loading ? "Adding..." : "Add Item"}
         </button>

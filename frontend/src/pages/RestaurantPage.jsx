@@ -75,26 +75,28 @@ const RestaurantPage = () => {
   return (
     <section className="p-6 min-h-screen bg-gray-50">
       {/* Restaurant Header */}
-      <div className="flex flex-col items-center text-center mb-8">
+      <div className="flex justify-start gap-2 items-center text-center mb-8">
         <img
           src={restaurant.image}
           alt={restaurant.name}
-          className="w-32 h-32 rounded-full object-cover shadow-md mb-4"
+          className="w-22 h-22 rounded-full object-cover shadow-md mb-4"
         />
-        <h1 className="text-3xl font-bold text-gray-800">
+        <div>
+        <h2 className="text-3xl font-bold text-gray-800">
           {capitalizeFirstLetter(restaurant.name)}
-        </h1>
+        </h2>
         <p className="text-gray-600 max-w-md">{restaurant.description}</p>
+        </div>
       </div>
 
       {/* See all menu */}
-      <div className="text-center mb-6">
-        <button
+      <div className="text-start mb-6">
+        <div
           onClick={() => navigate(`/${id}/menu`)}
-          className="px-6 py-2 bg-green-600 text-white rounded-full font-medium shadow-md hover:bg-green-700 transition"
+          className="  text-green-800  hover:bg-green-700 transition"
         >
           See All Menu 🍴
-        </button>
+        </div>
       </div>
 
       {/* Category Scroll */}
