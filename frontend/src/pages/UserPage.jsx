@@ -1,6 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiMenu, FiLogOut } from "react-icons/fi";
+import { FaUserCircle } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetUser } from "../../hooks/useGetUser";
+import { clearUserData } from "../redux/userSlice";
 
 const CAROUSEL_IMAGES = ["/banner1.png", "/banner2.png", "/banner4.png"];
 
@@ -10,6 +15,10 @@ const UserPage = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  useGetUser()
+  const user = useSelector((state)=>state.user.userData)
+  const dispatch = useDispatch()
 
   const handleClick = (id) => {
     navigate(`/${id}`);
@@ -21,7 +30,6 @@ const UserPage = () => {
       const result = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/restaurant`, {
         withCredentials: true,
       });
-      console.log(result.data.data)
       setRestaurants(result.data.data);
     } catch (err) {
       console.error("Failed to fetch restaurants:", err);
@@ -42,12 +50,24 @@ const UserPage = () => {
     return () => clearTimeout(timer);
   }, [current]);
 
-  // Filter restaurants based on search
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/logout`, {}, { withCredentials: true });
+
+      // ✅ Clear user data from localStorage
+      localStorage.removeItem("userData");
+       dispatch(clearUserData())
+      navigate("/");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   const filteredRestaurants = restaurants.filter((r) =>
     r.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Skeleton UI for restaurants
   const RestaurantSkeleton = () => (
     <div className="bg-white rounded-xl shadow p-4 flex flex-col items-center animate-pulse">
       <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-200 mb-3"></div>
@@ -57,10 +77,50 @@ const UserPage = () => {
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen pt-16">
+    <div className="bg-gray-50 min-h-screen pt-16 relative">
       
+      {/* ✅ Header with menu */}
+      <header className="fixed top-0 left-0 w-full bg-white shadow-sm z-10 flex justify-between items-center px-5 py-3">
+        <h1
+          className="text-xl font-bold text-green-600 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          EatRío
+        </h1>
+
+        <div className="relative">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-full hover:bg-gray-200 transition"
+          >
+            <FaUserCircle className="text-2xl text-gray-700" />
+            <FiMenu className="text-lg text-gray-600" />
+          </button>
+
+          {/* Dropdown Menu */}
+          {menuOpen && (
+            <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-20 p-4">
+              <div className="mb-3">
+                <h3 className="font-semibold text-gray-800">
+                  {user?.name || "Guest User"}
+                </h3>
+                <p className="text-sm text-gray-500">{user?.email || "No email"}</p>
+              </div>
+              <hr className="my-2" />
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 w-full text-left text-red-600 hover:text-red-700 font-semibold transition"
+              >
+                <FiLogOut />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
+
       {/* Carousel */}
-      <div className="px-4">
+      <div className="px-4 mt-4">
         <div className="relative rounded-xl overflow-hidden shadow-lg">
           <img
             src={CAROUSEL_IMAGES[current]}

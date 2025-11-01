@@ -25,34 +25,34 @@ export const registerOwner = async (req, res) => {
       email,
       password: hashedPassword,
       subscription: { active: false, plan: null },
-      restaurant: null, // initially no restaurant linked
+      restaurant: null,
     });
 
     const token = generateToken(owner._id);
 
     const populatedOwner = await Owner.findById(owner._id).populate("restaurant");
 
+    // ✅ Always allow cross-domain cookie (for Render/Vercel frontend)
     res
       .cookie("ownerToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: true, // ✅ required for HTTPS (Render)
+        sameSite: "none", // ✅ required for cross-site cookie
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .status(201)
       .json({
         success: true,
-        message:
-          "Owner registered successfully. Complete payment to activate subscription.",
+        message: "Owner registered successfully.",
         owner: {
           id: populatedOwner._id,
           name: populatedOwner.name,
           email: populatedOwner.email,
-          restaurant: populatedOwner.restaurant, // ✅ send restaurant (null for now)
+          restaurant: populatedOwner.restaurant,
         },
       });
   } catch (err) {
-    console.error(err);
+    console.error("Register Error:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
@@ -61,13 +61,10 @@ export const registerOwner = async (req, res) => {
 export const loginOwner = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     if (!email || !password)
       return res.status(400).json({ message: "Email and password required" });
 
-    // ✅ populate restaurant on login
     const owner = await Owner.findOne({ email }).populate("restaurant");
-
     if (!owner)
       return res.status(400).json({ message: "Invalid email or password" });
 
@@ -77,23 +74,23 @@ export const loginOwner = async (req, res) => {
 
     const token = generateToken(owner._id);
 
-    // check if subscription expired
+    // Check subscription
     if (
       owner.subscription.active &&
       new Date() > new Date(owner.subscription.endDate)
     ) {
       owner.subscription.active = false;
       await owner.save();
-      return res.status(403).json({
-        message: "Your subscription has expired. Please renew to log in.",
-      });
+      return res
+        .status(403)
+        .json({ message: "Your subscription has expired. Please renew." });
     }
 
     res
       .cookie("ownerToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: true,
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .status(200)
@@ -105,11 +102,11 @@ export const loginOwner = async (req, res) => {
           name: owner.name,
           email: owner.email,
           subscription: owner.subscription,
-          restaurant: owner.restaurant, // ✅ include linked restaurant
+          restaurant: owner.restaurant,
         },
       });
   } catch (err) {
-    console.error(err);
+    console.error("Login Error:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
@@ -119,6 +116,8 @@ export const logoutOwner = (req, res) => {
   res
     .cookie("ownerToken", "", {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
       expires: new Date(0),
     })
     .status(200)

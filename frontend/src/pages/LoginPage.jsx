@@ -1,41 +1,61 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { FaEyeSlash } from "react-icons/fa";
-import { FaEye } from "react-icons/fa";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
+
 const LoginPage = () => {
-  const [form, setForm] = useState({ email: "user@eatrio.com", password: "user123" });
+  const [form, setForm] = useState({
+    email: "user@eatrio.com",
+    password: "user123",
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = async(e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    try{
-        const result = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/sign-in`,{
-            email:form.email,
-            password:form.password,
-        },{withCredentials:true})
-        navigate("/user-dashboard")
+    try {
+      const result = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/user/sign-in`,
+        {
+          email: form.email,
+          password: form.password,
+        },
+        { withCredentials: true }
+      );
 
-    }catch(err){
-        console.log(err)
+      // ✅ Extract user info (depends on your API response)
+      const userData = result.data.user || result.data.data || null;
+
+      // ✅ Save user info in Redux + localStorage
+      dispatch(setUserData(userData));
+
+      // ✅ Navigate to dashboard
+      navigate("/user-dashboard");
+    } catch (err) {
+      console.error("Login failed:", err);
+      alert("Invalid credentials or server error!");
     }
   };
 
   return (
     <div className="">
       <div className="px-8 mt-12 bg-white">
-
         <div className="flex flex-col items-center mb-8">
-          {/* Replace with your EatRio logo */}
           <img src="/logo1.png" alt="" className="w-25" />
-          <h2 className="text-xl mt-4 font-semibold text-slate-800">Sign In</h2>
+          <h2 className="text-xl mt-4 font-semibold text-slate-800">
+            Sign In
+          </h2>
         </div>
         <form onSubmit={handleLogin}>
+          {/* Email */}
           <div className="mb-4">
             <label
               className="block text-start text-xl font-medium mb-1 text-slate-600"
@@ -54,6 +74,8 @@ const LoginPage = () => {
               className="w-full px-4 py-3 border rounded-lg bg-gray-100 focus:outline-none focus:border-blue-400"
             />
           </div>
+
+          {/* Password */}
           <div className="mb-2">
             <label
               className="block text-start text-xl font-medium mb-1 text-slate-600"
@@ -73,76 +95,34 @@ const LoginPage = () => {
                 className="w-full px-4 py-3 border rounded-lg bg-gray-100 focus:outline-none focus:border-blue-400 pr-12"
               />
               <div
-                type="button"
                 className="absolute cursor-pointer inset-y-0 right-3 flex items-center text-gray-500 focus:outline-none"
                 onClick={() => setShowPassword((prev) => !prev)}
-                tabIndex={-1}
               >
-                {showPassword ? (
-                  // Eye Open SVG
-                  <FaEye />
-                ) : (
-                  // Eye Closed SVG
-                  <FaEyeSlash />
-                )}
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
               </div>
             </div>
           </div>
+
+          {/* Forget Password */}
           <div className="text-right mb-6">
             <div
-              type="button"
               className="text-blue-600 pt-2 text-sm hover:underline focus:outline-none"
-
+              type="button"
             >
               Forget password
             </div>
           </div>
+
+          {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg !bg-green-600 text-white font-medium text-lg hover:bg-blue-700 transition mb-6"
+            className="w-full py-3 rounded-lg bg-green-600 text-white font-medium text-lg hover:bg-green-700 transition mb-6"
           >
             Login
           </button>
         </form>
-        {/* Or continue with */}
-        <div className="flex items-center my-4">
-          <span className="flex-grow border-t border-gray-200"></span>
-          <span className="mx-3 text-gray-400">Or Continue with</span>
-          <span className="flex-grow border-t border-gray-200"></span>
-        </div>
-        <div className="flex justify-center gap-4 mb-4">
-          {/* Google Button */}
-          <button className="flex items-center px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-200">
-            <svg width="24" height="24" className="mr-2" viewBox="0 0 24 24">
-              <g>
-                <circle cx="12" cy="12" r="10" fill="#fff" />
-                <path
-                  d="M21.35 11.1H12v2.8h5.35C16.76 16.7 14.71 18.3 12 18.3c-3.47 0-6.3-2.82-6.3-6.3s2.83-6.3 6.3-6.3c1.65 0 3.16.63 4.32 1.67l2.13-2.13C18.15 4.53 15.26 3.3 12 3.3 6.82 3.3 2.7 7.41 2.7 12.6s4.12 9.3 9.3 9.3c5.08 0 9.3-4.12 9.3-9.3 0-.54-.06-1.06-.15-1.55z"
-                  fill="#4285F4"
-                />
-              </g>
-            </svg>
-            Google
-          </button>
-          {/* Facebook Button */}
-          <button className="flex items-center px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-200">
-            <svg width="24" height="24" className="mr-2" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" fill="#1877F3" />
-              <text
-                x="12"
-                y="16"
-                fill="#fff"
-                fontSize="12"
-                textAnchor="middle"
-                fontFamily="Arial"
-              >
-                f
-              </text>
-            </svg>
-            Facebook
-          </button>
-        </div>
-        {/* Footer text */}
+
+        {/* Footer */}
         <div className="text-center text-slate-500 text-sm pb-4">
           Haven’t any account?{" "}
           <a

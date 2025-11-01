@@ -17,6 +17,7 @@ const OwnerProfile = () => {
         { withCredentials: true }
       );
       dispatch(clearOwnerData());
+      localStorage.removeItem("ownerData");
       navigate("/owner-login");
     } catch (err) {
       console.error("Logout failed:", err);

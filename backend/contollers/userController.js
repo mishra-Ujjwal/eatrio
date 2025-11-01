@@ -31,11 +31,11 @@ export const registerUser = async (req, res) => {
     });
      const token= generateToken(user._id);
      res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      sameSite: "Strict"
-    });
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+});
     res.status(201).json({
       success: true,
       user: {
@@ -89,6 +89,26 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const logoutUser = async (req, res) => {
+  try {
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // must be true in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // allows cross-origin cookie clearing
+      expires: new Date(0), // expire immediately
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout Error:", error);
+    res.status(500).json({ message: "Failed to logout" });
+  }
+};
+
 
 export const getMe = async (req, res) => {
   try {

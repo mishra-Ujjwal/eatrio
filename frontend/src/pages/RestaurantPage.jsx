@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { capitalizeFirstLetter } from "../utils/CapitalizeFirstLetter.js"
+import { capitalizeFirstLetter } from "../utils/CapitalizeFirstLetter.js";
 
 const RestaurantPage = () => {
   const { id } = useParams();
@@ -82,10 +82,10 @@ const RestaurantPage = () => {
           className="w-22 h-22 rounded-full object-cover shadow-md mb-4"
         />
         <div>
-        <h2 className="text-3xl font-bold text-gray-800">
-          {capitalizeFirstLetter(restaurant.name)}
-        </h2>
-        <p className="text-gray-600 max-w-md">{restaurant.description}</p>
+          <h2 className="text-3xl font-bold text-gray-800">
+            {capitalizeFirstLetter(restaurant.name)}
+          </h2>
+          <p className="text-gray-600 max-w-md">{restaurant.description}</p>
         </div>
       </div>
 
@@ -127,7 +127,7 @@ const RestaurantPage = () => {
 
       {/* Menu Items */}
       {selectedCategory && selectedCategory.items?.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {selectedCategory.items.map((item) => (
             <div
               key={item._id}
@@ -138,38 +138,45 @@ const RestaurantPage = () => {
                 alt={item.name}
                 className="w-full h-40 object-cover rounded-lg mb-3"
               />
-              <h3 className="text-lg font-semibold text-gray-800">
-                {item.name}
-              </h3>
-              <p className="text-green-600 font-semibold mb-2">₹{item.price}</p>
-
-              {/* Cart controls */}
-              {cart[item._id] ? (
-                <div className="flex items-center gap-3 mt-3">
-                  <button
-                    onClick={() => handleRemoveFromCart(item._id)}
-                    className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-xl font-bold text-gray-700"
-                  >
-                    −
-                  </button>
-                  <span className="text-lg font-medium text-gray-800">
-                    {cart[item._id]}
-                  </span>
+              <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {item.name}
+                </h3>
+                <p className="text-green-600 font-semibold mb-2">
+                  ₹{item.price}
+                </p>
+              </div>
+              <div>
+                {/* Cart controls */}
+                {cart[item._id] ? (
+                  <div className="flex items-center gap-3 mt-3">
+                    <button
+                      onClick={() => handleRemoveFromCart(item._id)}
+                      className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-xl font-bold text-gray-700"
+                    >
+                      −
+                    </button>
+                    <span className="text-lg font-medium text-gray-800">
+                      {cart[item._id]}
+                    </span>
+                    <button
+                      onClick={() => handleAddToCart(item._id)}
+                      className="w-8 h-8 flex items-center justify-center bg-green-600 text-white rounded-full text-xl font-bold"
+                    >
+                      +
+                    </button>
+                  </div>
+                ) : (
                   <button
                     onClick={() => handleAddToCart(item._id)}
-                    className="w-8 h-8 flex items-center justify-center bg-green-600 text-white rounded-full text-xl font-bold"
+                    className="px-6 py-2 border border-green-600 text-green-600 font-semibold rounded-full hover:bg-green-600 hover:text-white transition"
                   >
-                    +
+                    Add +
                   </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => handleAddToCart(item._id)}
-                  className="px-6 py-2 border border-green-600 text-green-600 font-semibold rounded-full hover:bg-green-600 hover:text-white transition"
-                >
-                  Add +
-                </button>
-              )}
+                )}
+              </div>
+              </div>
             </div>
           ))}
         </div>
