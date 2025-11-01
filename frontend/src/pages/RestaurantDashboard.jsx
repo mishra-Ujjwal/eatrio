@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { FaRegBell } from "react-icons/fa6";
-import { MdSpaceDashboard, MdOutlineBorderColor } from "react-icons/md";
-import { LuSquareMenu } from "react-icons/lu";
-import { CgProfile } from "react-icons/cg";
-
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-
 import { useGetOwner } from "../../hooks/useGetOwner.jsx";
-import { clearOwnerData } from "../redux/ownerSlice";
-import RestaurantHeader from "./Restaurant/RestaurantHeader";
+import { clearOwnerData } from "../redux/ownerSlice.js";
+import RestaurantHeader from "./Restaurant/RestaurantHeader.jsx";
 import { capitalizeFirstLetter } from "../utils/CapitalizeFirstLetter.js";
 
 const RestaurantDashboard = () => {
@@ -21,18 +16,17 @@ const RestaurantDashboard = () => {
 
   useGetOwner();
   const owner = useSelector((state) => state.owner.ownerData);
-
-  // ✅ Handle safely if owner or restaurant isn't loaded yet
   const restaurant = owner?.restaurant || {};
   const restaurantId = restaurant?._id || restaurant?.id || "";
 
-if (!restaurantId) {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <p className="text-gray-500 text-lg">Loading dashboard...</p>
-    </div>
-  );
-}
+  if (!restaurantId) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500 text-lg">Loading dashboard...</p>
+      </div>
+    );
+  }
+
   // ✅ Logout
   const handleLogout = async () => {
     try {
@@ -52,25 +46,25 @@ if (!restaurantId) {
     {
       id: "dashboard",
       label: "Dashboard",
-      icon: <MdSpaceDashboard />,
+      icon: "🏠",
       path: `/restaurant-dashboard/${restaurantId}`,
     },
     {
       id: "menu",
       label: "Menu",
-      icon: <LuSquareMenu />,
+      icon: "📋",
       path: `/restaurant-dashboard/${restaurantId}/menu`,
     },
     {
       id: "orders",
       label: "Orders",
-      icon: <MdOutlineBorderColor />,
+      icon: "🛍️",
       path: `/restaurant-dashboard/${restaurantId}/orders`,
     },
     {
       id: "profile",
       label: "Profile",
-      icon: <CgProfile />,
+      icon: "👤",
       path: `/restaurant-dashboard/${restaurantId}/profile`,
     },
   ];
@@ -78,16 +72,20 @@ if (!restaurantId) {
   const activePath = location.pathname;
 
   return (
-    <section className="min-h-screen w-screen flex relative bg-gray-50">
-      {/* Sidebar (Desktop) */}
-      <aside className="md:w-1/4 sm:w-1/3 bg-red-400 hidden sm:block">
-        <RestaurantHeader restaurantId={restaurantId} />
+    <section className="min-h-screen w-screen  flex relative bg-gray-50">
+      {/* Sidebar for desktop */}
+      <aside className="md:w-1/4 sm:w-1/3 bg-white hidden sm:block">
+        <RestaurantHeader restaurant={restaurant} restaurantId={restaurantId} />
       </aside>
 
       {/* Mobile Navbar */}
       <nav className="sm:hidden flex items-center justify-between fixed top-0 w-full bg-white shadow-lg py-2 px-3 z-50">
         <div className="flex items-center gap-3">
-          <img src={restaurant?.image} alt="Logo" className="h-13 rounded-full" />
+          <img
+            src={restaurant?.image || "/default-restaurant.png"}
+            alt="Logo"
+            className="h-10 w-10 rounded-full object-cover"
+          />
           <div className="text-lg font-bold">
             {capitalizeFirstLetter(restaurant?.name) || "Restaurant"}
           </div>
@@ -109,11 +107,11 @@ if (!restaurantId) {
       </nav>
 
       {/* Main Content */}
-      <main className="pt-16 sm:pt-0 md:w-3/4 w-full">
+      <main className="pt-16 sm:pt-0 sm:2/3 md:w-4/5 overflow-y-auto">
         <Outlet />
       </main>
 
-      {/* Mobile Footer */}
+      {/* Mobile Footer Tabs */}
       <footer className="fixed sm:hidden bottom-0 shadow-lg bg-white w-screen px-4 text-sm font-medium py-2 flex items-center justify-between z-50">
         {tabs.map((tab) => (
           <div
@@ -131,7 +129,7 @@ if (!restaurantId) {
         ))}
       </footer>
 
-      {/* ✅ Owner Profile Popup */}
+      {/* ✅ Profile Popup */}
       {showProfile && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-sm relative">

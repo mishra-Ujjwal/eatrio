@@ -26,7 +26,7 @@ const OwnerSignup = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-50">
+    <div className="min-h-screen w-screen flex justify-center items-center bg-gray-50">
       <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md space-y-4">
         <h2 className="text-2xl font-bold text-center">Owner Signup</h2>
         <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required className="w-full p-3 border rounded-lg"/>

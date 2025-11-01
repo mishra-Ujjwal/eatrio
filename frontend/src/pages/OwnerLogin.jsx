@@ -43,7 +43,7 @@ const OwnerLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-50">
+    <div className="min-h-screen w-screen flex justify-center items-center bg-gray-50">
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md space-y-4"
