@@ -105,11 +105,13 @@ const CartPage = () => {
                 <p className="text-green-600 font-medium">₹{item.price}</p>
               </div>
             </div>
+           
+           
             <div className="flex items-center gap-3">
-              <button onClick={() => handleRemove(item)} className="px-3 py-1 border rounded-full">−</button>
-              <span>{item.quantity}</span>
-              <button onClick={() => handleAdd(item)} className="px-3 py-1 bg-green-600 text-white rounded-full">+</button>
-            </div>
+                    <div onClick={() => handleRemove(item)} className="px-3 py-1 rounded-lg bg-gray-300">−</div>
+                    <span>{item.quantity}</span>
+                    <div onClick={() => handleAdd(item)} className="px-3 py-1  bg-green-600 text-white rounded-lg">+</div>
+                  </div>
           </div>
         ))}
       </div>
@@ -133,15 +135,6 @@ const CartPage = () => {
         >
           Proceed To Checkout
         </div>
-      </div>
-
-      <div className="flex justify-center">
-        <button
-          onClick={handleClear}
-          className="px-4 py-2 border border-red-500 text-red-600 rounded-lg hover:bg-red-500 hover:text-white"
-        >
-          Clear Cart
-        </button>
       </div>
     </section>
   );
