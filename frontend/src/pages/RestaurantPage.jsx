@@ -85,9 +85,9 @@ const RestaurantPage = () => {
         </div>
 
         {/* Menu Items Skeleton */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="bg-white p-4 rounded-lg border">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-white p-2 rounded-lg ">
               <SkeletonCard />
               <div className="h-5 bg-gray-200 rounded w-3/4 mb-2 animate-pulse"></div>
               <div className="h-5 bg-gray-200 rounded w-1/2 animate-pulse"></div>
@@ -127,23 +127,25 @@ const RestaurantPage = () => {
       </div>
 
       {selectedCategory?.items?.length > 0 ? (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {selectedCategory.items.map((item) => {
             const inCart = items.find((i) => i.name === item.name);
             return (
-              <div key={item._id} className="bg-white p-4 rounded-lg border hover:shadow-lg transition">
+              <div key={item._id} className="bg-white p-2 rounded-lg  hover:shadow-lg transition">
                 <img src={item.image} alt={item.name} className="w-full h-40 object-cover rounded-lg mb-3" />
                 <h3>{item.name}</h3>
+                <div className="flex items-center justify-between">
                 <p className="text-green-600 font-bold mb-3">₹{item.price}</p>
                 {inCart ? (
                   <div className="flex items-center gap-3">
-                    <button onClick={() => handleRemove(item)} className="px-3 py-1 border rounded-full">−</button>
+                    <div onClick={() => handleRemove(item)} className="px-1.5 rounded-lg bg-gray-300">−</div>
                     <span>{inCart.quantity}</span>
-                    <button onClick={() => handleAdd(item)} className="px-3 py-1 bg-green-600 text-white rounded-full">+</button>
+                    <div onClick={() => handleAdd(item)} className="px-1.5  bg-green-600 text-white rounded-lg">+</div>
                   </div>
                 ) : (
-                  <button onClick={() => handleAdd(item)} className="w-full py-2 border border-green-600 text-green-600 font-semibold rounded-lg hover:bg-green-600 hover:text-white transition">Add +</button>
+                  <div onClick={() => handleAdd(item)} className="px-3 py-1 border border-green-600 text-green-600 font-semibold rounded-lg hover:bg-green-600 hover:text-white transition">Add +</div>
                 )}
+                </div>
               </div>
             );
           })}
