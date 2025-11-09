@@ -3,7 +3,8 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
 
-// Fetch cart for a specific restaurant
+// --- Async Thunks ---
+
 export const fetchCartDB = createAsyncThunk(
   "cart/fetchCartDB",
   async (restaurantId, { rejectWithValue }) => {
@@ -18,7 +19,6 @@ export const fetchCartDB = createAsyncThunk(
   }
 );
 
-// Add item to cart
 export const addToCartDB = createAsyncThunk(
   "cart/addToCartDB",
   async (item, { rejectWithValue }) => {
@@ -33,7 +33,6 @@ export const addToCartDB = createAsyncThunk(
   }
 );
 
-// Remove item from cart
 export const removeFromCartDB = createAsyncThunk(
   "cart/removeFromCartDB",
   async ({ restaurantId, name }, { rejectWithValue }) => {
@@ -50,7 +49,6 @@ export const removeFromCartDB = createAsyncThunk(
   }
 );
 
-// Clear cart for restaurant
 export const clearCartDB = createAsyncThunk(
   "cart/clearCartDB",
   async (restaurantId, { rejectWithValue }) => {
@@ -65,19 +63,29 @@ export const clearCartDB = createAsyncThunk(
   }
 );
 
+// --- Local Storage Helpers ---
+const saveToLocalStorage = (items, restaurant) => {
+  localStorage.setItem("cartItems", JSON.stringify(items));
+  localStorage.setItem("cartRestaurant", JSON.stringify(restaurant));
+};
+
+const initialState = {
+  items: JSON.parse(localStorage.getItem("cartItems")) || [],
+  restaurant: JSON.parse(localStorage.getItem("cartRestaurant")) || null,
+  loading: false,
+  error: null,
+};
+
+// --- Slice ---
 const cartSlice = createSlice({
   name: "cart",
-  initialState: {
-    items: [],
-    restaurant: null,
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     addToCartLocal: (state, action) => {
       const existing = state.items.find((i) => i.name === action.payload.name);
       if (existing) existing.quantity += 1;
       else state.items.push({ ...action.payload, quantity: 1 });
+      saveToLocalStorage(state.items, state.restaurant);
     },
     removeFromCartLocal: (state, action) => {
       const index = state.items.findIndex((i) => i.name === action.payload);
@@ -85,14 +93,17 @@ const cartSlice = createSlice({
         if (state.items[index].quantity > 1) state.items[index].quantity -= 1;
         else state.items.splice(index, 1);
       }
+      saveToLocalStorage(state.items, state.restaurant);
     },
     clearCartLocal: (state) => {
       state.items = [];
       state.restaurant = null;
+      saveToLocalStorage(state.items, state.restaurant);
     },
   },
   extraReducers: (builder) => {
     builder
+      // fetchCartDB
       .addCase(fetchCartDB.pending, (state) => {
         state.loading = true;
       })
@@ -100,22 +111,29 @@ const cartSlice = createSlice({
         state.loading = false;
         state.items = action.payload?.items || [];
         state.restaurant = action.payload?.restaurantId || null;
+        saveToLocalStorage(state.items, state.restaurant);
       })
       .addCase(fetchCartDB.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch cart";
       })
+      // addToCartDB
       .addCase(addToCartDB.fulfilled, (state, action) => {
         state.items = action.payload?.items || [];
         state.restaurant = action.payload?.restaurantId || null;
+        saveToLocalStorage(state.items, state.restaurant);
       })
+      // removeFromCartDB
       .addCase(removeFromCartDB.fulfilled, (state, action) => {
         state.items = action.payload?.items || [];
         state.restaurant = action.payload?.restaurantId || null;
+        saveToLocalStorage(state.items, state.restaurant);
       })
+      // clearCartDB
       .addCase(clearCartDB.fulfilled, (state) => {
         state.items = [];
         state.restaurant = null;
+        saveToLocalStorage(state.items, state.restaurant);
       });
   },
 });

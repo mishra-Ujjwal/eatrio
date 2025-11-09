@@ -16,6 +16,7 @@ const CartPage = () => {
   const { id: restaurantId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { items, loading, error } = useSelector((state) => state.cart);
 
   useEffect(() => {
@@ -43,7 +44,8 @@ const CartPage = () => {
       alert("Please enter a table number");
       return;
     }
-    console.log("Table Number Selected:", tableNumber);
+    console.log("Proceeding to checkout with table:", tableNumber);
+    navigate(`/checkout/${restaurantId}?table=${tableNumber}`);
   };
 
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
@@ -53,22 +55,20 @@ const CartPage = () => {
       <div className="flex flex-col items-center justify-center min-h-screen">
         <div className="loader mb-4"></div>
         <p className="text-gray-600 text-lg">Loading your cart...</p>
-        <style>
-          {`
-            .loader {
-              border: 6px solid #f3f3f3;
-              border-top: 6px solid #22c55e;
-              border-radius: 50%;
-              width: 50px;
-              height: 50px;
-              animation: spin 1s linear infinite;
-            }
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}
-        </style>
+        <style>{`
+          .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #22c55e;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
       </div>
     );
 
@@ -81,9 +81,7 @@ const CartPage = () => {
           className="w-40 h-40 mb-4"
         />
         <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
-        <p className="text-gray-600 mb-4">
-          Add some delicious items to get started!
-        </p>
+        <p className="text-gray-600 mb-4">Add some delicious items to get started!</p>
         <button
           onClick={() => navigate("/")}
           className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
@@ -99,41 +97,24 @@ const CartPage = () => {
 
       <div className="bg-white p-6 rounded-lg shadow mb-6">
         {items.map((item) => (
-          <div
-            key={item.name}
-            className="flex items-center justify-between border-b py-3"
-          >
+          <div key={item.name} className="flex items-center justify-between border-b py-3">
             <div className="flex items-center gap-4">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-20 h-20 rounded-lg object-cover"
-              />
+              <img src={item.image} alt={item.name} className="w-20 h-20 rounded-lg object-cover" />
               <div>
                 <p>{item.name}</p>
                 <p className="text-green-600 font-medium">₹{item.price}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => handleRemove(item)}
-                className="px-3 py-1 border rounded-full"
-              >
-                −
-              </button>
+              <button onClick={() => handleRemove(item)} className="px-3 py-1 border rounded-full">−</button>
               <span>{item.quantity}</span>
-              <button
-                onClick={() => handleAdd(item)}
-                className="px-3 py-1 bg-green-600 text-white rounded-full"
-              >
-                +
-              </button>
+              <button onClick={() => handleAdd(item)} className="px-3 py-1 bg-green-600 text-white rounded-full">+</button>
             </div>
           </div>
         ))}
       </div>
 
- <div className="p-6 mt-5 bg-white flex flex-col items-center justify-center">
+      <div className="p-6 mt-5 bg-white flex flex-col items-center justify-center">
         <h2 className="text-2xl font-bold mb-4">Enter Your Table Number</h2>
         <input
           type="number"
@@ -142,11 +123,10 @@ const CartPage = () => {
           onChange={(e) => setTableNumber(e.target.value)}
           className="px-4 py-2 border rounded-lg mb-4 w-48 text-center"
         />
-        
       </div>
+
       <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow mb-6">
         <p className="text-xl font-bold">Total: ₹{total}</p>
-        
         <div
           onClick={handleProceed}
           className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 cursor-pointer"
@@ -155,6 +135,14 @@ const CartPage = () => {
         </div>
       </div>
 
+      <div className="flex justify-center">
+        <button
+          onClick={handleClear}
+          className="px-4 py-2 border border-red-500 text-red-600 rounded-lg hover:bg-red-500 hover:text-white"
+        >
+          Clear Cart
+        </button>
+      </div>
     </section>
   );
 };

@@ -11,6 +11,14 @@ import {
 } from "../redux/cartSlice";
 import { capitalizeFirstLetter } from "../utils/CapitalizeFirstLetter";
 
+const SkeletonCard = () => (
+  <div className="bg-gray-200 animate-pulse rounded-lg w-full h-52 mb-3"></div>
+);
+
+const SkeletonCategory = () => (
+  <div className="bg-gray-200 animate-pulse rounded-lg w-32 h-32 mr-4"></div>
+);
+
 const RestaurantPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -57,11 +65,42 @@ const RestaurantPage = () => {
 
   const cartCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <section className="p-6 w-screen bg-gray-50 min-h-screen">
+        {/* Restaurant Info Skeleton */}
+        <div className="flex items-center gap-4 mb-6">
+          <div className="w-20 h-20 rounded-full bg-gray-200 animate-pulse"></div>
+          <div className="flex-1 space-y-2">
+            <div className="h-6 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
+          </div>
+        </div>
+
+        {/* Categories Skeleton */}
+        <div className="flex gap-4 overflow-x-auto pb-4 mb-6">
+          {[...Array(3)].map((_, i) => (
+            <SkeletonCategory key={i} />
+          ))}
+        </div>
+
+        {/* Menu Items Skeleton */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="bg-white p-4 rounded-lg border">
+              <SkeletonCard />
+              <div className="h-5 bg-gray-200 rounded w-3/4 mb-2 animate-pulse"></div>
+              <div className="h-5 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+
   if (!restaurant) return <div>Restaurant not found</div>;
 
   return (
-    <section className="p-6 bg-gray-50 min-h-screen">
+    <section className="p-6 w-screen bg-gray-50 min-h-screen">
       <div className="flex items-center gap-4 mb-6">
         <img src={restaurant.image} alt={restaurant.name} className="w-20 h-20 rounded-full object-cover" />
         <div>
@@ -72,7 +111,15 @@ const RestaurantPage = () => {
 
       <div className="flex gap-4 overflow-x-auto pb-4 mb-6">
         {categories.map((cat) => (
-          <div key={cat._id} onClick={() => setSelectedCategory(cat)} className={`p-4 rounded-lg border cursor-pointer ${selectedCategory?._id === cat._id ? "bg-green-100 border-green-500" : "bg-white border-gray-200"}`}>
+          <div
+            key={cat._id}
+            onClick={() => setSelectedCategory(cat)}
+            className={`p-4 rounded-lg border cursor-pointer ${
+              selectedCategory?._id === cat._id
+                ? "bg-green-100 border-green-500"
+                : "bg-white border-gray-200"
+            }`}
+          >
             <img src={cat.image} alt={cat.name} className="w-32 h-32 object-cover rounded-lg mb-2" />
             <p>{capitalizeFirstLetter(cat.name)}</p>
           </div>
@@ -80,7 +127,7 @@ const RestaurantPage = () => {
       </div>
 
       {selectedCategory?.items?.length > 0 ? (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {selectedCategory.items.map((item) => {
             const inCart = items.find((i) => i.name === item.name);
             return (
