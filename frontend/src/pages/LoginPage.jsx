@@ -46,7 +46,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="">
+    <div className="w-screen">
       <div className="px-8 mt-12 bg-white">
         <div className="flex flex-col items-center mb-8">
           <img src="/logo1.png" alt="" className="w-25" />

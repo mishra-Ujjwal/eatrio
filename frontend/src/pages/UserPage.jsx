@@ -77,15 +77,15 @@ const UserPage = () => {
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen pt-16 relative">
+    <div className="w-screen md:px-38 bg-gray-50 min-h-screen pt-16 relative">
       
       {/* ✅ Header with menu */}
-      <header className="fixed top-0 left-0 w-full bg-white shadow-sm z-10 flex justify-between items-center px-5 py-3">
+      <header className="fixed top-0 md:px-38 left-0 w-full bg-white shadow-sm z-10 flex justify-between items-center px-5 py-3">
         <h1
           className="text-xl font-bold text-green-600 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          EatRío
+          Eatrio
         </h1>
 
         <div className="relative">
@@ -120,7 +120,7 @@ const UserPage = () => {
       </header>
 
       {/* Carousel */}
-      <div className="px-4 mt-4">
+      <div className="px-4 mt-8">
         <div className="relative rounded-xl overflow-hidden shadow-lg">
           <img
             src={CAROUSEL_IMAGES[current]}
