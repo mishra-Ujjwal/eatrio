@@ -23,6 +23,7 @@ import ProfilePage from './pages/Restaurant/ProfilePage.jsx'
 import RestaurantPage from './pages/RestaurantPage.jsx'
 import AllMenuPage from './pages/AllMenuPage.jsx'
 import CartPage from './pages/CartPage.jsx'
+import UserOrderPage from './pages/UserOrderPage.jsx'
 const router = createBrowserRouter([
   {
     path:"/",
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
     path:"/:id/cart",
     element:<CartPage/>,
   },{
+    path:"/user-orders",
+    element:<UserOrderPage/>
+  }
+  ,{
     path:"/:id/menu",
     element:<AllMenuPage/>,
   },{

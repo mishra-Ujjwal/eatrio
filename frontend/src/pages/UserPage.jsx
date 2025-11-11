@@ -16,13 +16,12 @@ const UserPage = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-  useGetUser()
-  const user = useSelector((state)=>state.user.userData)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const handleClick = (id) => {
-    navigate(`/${id}`);
-  };
+  useGetUser();
+  const user = useSelector((state) => state.user.userData);
+
+  const handleClick = (id) => navigate(`/${id}`);
 
   const getAllRestaurant = async () => {
     setLoading(true);
@@ -50,14 +49,23 @@ const UserPage = () => {
     return () => clearTimeout(timer);
   }, [current]);
 
-  // Logout handler
+  // ✅ Close menu when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (!e.target.closest(".menu-wrapper")) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
+
+  // ✅ Logout handler
   const handleLogout = async () => {
     try {
       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/logout`, {}, { withCredentials: true });
-
-      // ✅ Clear user data from localStorage
       localStorage.removeItem("userData");
-       dispatch(clearUserData())
+      dispatch(clearUserData());
       navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
@@ -78,9 +86,8 @@ const UserPage = () => {
 
   return (
     <div className="w-screen md:px-38 bg-gray-50 min-h-screen pt-16 relative">
-      
-      {/* ✅ Header with menu */}
-      <header className="fixed top-0 md:px-38 left-0 w-full bg-white shadow-sm z-10 flex justify-between items-center px-5 py-3">
+      {/* ✅ Header with dropdown */}
+      <header className="fixed top-0 left-0 w-full bg-white shadow-sm z-50 flex justify-between items-center px-5 py-3">
         <h1
           className="text-xl font-bold text-green-600 cursor-pointer"
           onClick={() => navigate("/")}
@@ -88,18 +95,24 @@ const UserPage = () => {
           Eatrio
         </h1>
 
-        <div className="relative">
+        <div className="relative menu-wrapper">
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuOpen((prev) => !prev);
+            }}
             className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-full hover:bg-gray-200 transition"
           >
             <FaUserCircle className="text-2xl text-gray-700" />
             <FiMenu className="text-lg text-gray-600" />
           </button>
 
-          {/* Dropdown Menu */}
+          {/* ✅ Dropdown Menu */}
           {menuOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-20 p-4">
+            <div
+              className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4 transition-all duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="mb-3">
                 <h3 className="font-semibold text-gray-800">
                   {user?.name || "Guest User"}
@@ -119,7 +132,7 @@ const UserPage = () => {
         </div>
       </header>
 
-      {/* Carousel */}
+      {/* ✅ Carousel */}
       <div className="px-4 mt-8">
         <div className="relative rounded-xl overflow-hidden shadow-lg">
           <img
@@ -141,7 +154,7 @@ const UserPage = () => {
         </div>
       </div>
 
-      {/* Search Bar */}
+      {/* ✅ Search Bar */}
       <div className="px-4 mt-6">
         <input
           type="text"
@@ -152,7 +165,7 @@ const UserPage = () => {
         />
       </div>
 
-      {/* Restaurant Grid */}
+      {/* ✅ Restaurant Grid */}
       <div className="px-4 py-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
         {loading
           ? [...Array(8)].map((_, idx) => <RestaurantSkeleton key={idx} />)
@@ -168,7 +181,9 @@ const UserPage = () => {
                   alt={item.name}
                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover mb-3"
                 />
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-800">{item.name}</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+                  {item.name}
+                </h2>
               </div>
             ))
           : (

@@ -13,6 +13,7 @@ import restaurantRouter from "./routes/restaurant.route.js";
 import uploadRoutes from "./routes/upload.route.js";
 import menuRouter from "./routes/menu.route.js";
 import cartRouter from "./routes/cart.route.js";
+import orderRouter from "./routes/order.route.js";
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use("/restaurant", restaurantRouter);
 app.use("/api/upload", uploadRoutes);
 app.use("/menu", menuRouter);
 app.use("/user-cart", cartRouter);
+app.use("/api/orders", orderRouter);
 
 // 🩺 Health check
 app.get("/", (req, res) => {
