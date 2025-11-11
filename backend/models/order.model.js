@@ -27,7 +27,6 @@ const OrderSchema = new mongoose.Schema({
     transactionId: String
   },
   pickupTable: { type: String, required: true }, // Mandatory table number
-  specialInstructions: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

@@ -39,7 +39,7 @@ app.use(
 
 // 🚏 API Routes
 app.use("/user", userRouter);
-app.use("/owner/payment", paymentRouter);
+app.use("/api/payment", paymentRouter);
 app.use("/owner", ownerRouter);
 app.use("/restaurant", restaurantRouter);
 app.use("/api/upload", uploadRoutes);

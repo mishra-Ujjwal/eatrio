@@ -17,7 +17,7 @@ const Payment = () => {
 
     try {
       const { data: order } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/owner/payment/create-order`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,
         { amount }
       );
 
@@ -31,7 +31,7 @@ const Payment = () => {
         handler: async function (response) {
           // Send payment + owner + restaurant info to backend
           const verifyRes = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/owner/payment/verify-payment`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/payment/verify-payment`,
             {
               ...response,
               ownerData: { ...restaurantData, subscriptionPlan: plan, ownerId },
