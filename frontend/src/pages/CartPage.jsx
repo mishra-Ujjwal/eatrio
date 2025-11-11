@@ -14,7 +14,7 @@ import axios from "axios";
 
 const CartPage = () => {
   const userData = useSelector((state) => state.user.userData);
-  console.log(userData)
+  console.log("userData is"+userData)
 
   const [tableNumber, setTableNumber] = useState("");
   const [tableError, setTableError] = useState("");
@@ -57,7 +57,7 @@ const CartPage = () => {
         amount: total,
       }
     );
-
+console.log("📦 Incoming order data:", { userId:userData._id, restaurantId, pickupTable, items });
     const options = {
       key: data.key,
       amount: data.amount,
