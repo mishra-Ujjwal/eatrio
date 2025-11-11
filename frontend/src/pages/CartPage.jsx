@@ -57,7 +57,6 @@ const userId = userData._id||userData.id;
         amount: total,
       }
     );
-console.log("📦 Incoming order data:", { userId, restaurantId, pickupTable, items });
     const options = {
       key: data.key,
       amount: data.amount,
