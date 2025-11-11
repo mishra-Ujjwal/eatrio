@@ -14,7 +14,7 @@ import axios from "axios";
 
 const CartPage = () => {
   const userData = useSelector((state) => state.user.userData);
-  console.log("userData is"+userData)
+const userId = userData._id||userData.id;
 
   const [tableNumber, setTableNumber] = useState("");
   const [tableError, setTableError] = useState("");
@@ -57,7 +57,7 @@ const CartPage = () => {
         amount: total,
       }
     );
-console.log("📦 Incoming order data:", { userId:userData._id, restaurantId, pickupTable, items });
+console.log("📦 Incoming order data:", { userId, restaurantId, pickupTable, items });
     const options = {
       key: data.key,
       amount: data.amount,
@@ -74,7 +74,7 @@ console.log("📦 Incoming order data:", { userId:userData._id, restaurantId, pi
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
-            userId: userData._id,
+            userId: userId,
             restaurantId: restaurantId,
             items: items.map((item) => ({
               _id: item._id,
