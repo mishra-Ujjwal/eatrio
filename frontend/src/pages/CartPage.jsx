@@ -14,6 +14,7 @@ import axios from "axios";
 
 const CartPage = () => {
   const userData = useSelector((state) => state.user.userData);
+  console.log(userData)
 
   const [tableNumber, setTableNumber] = useState("");
   const [tableError, setTableError] = useState("");
