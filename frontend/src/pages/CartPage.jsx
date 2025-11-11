@@ -55,7 +55,7 @@ const userId = userData._id||userData.id;
       `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order-customer`,
       {
         amount: total,
-      }
+      } ,{ withCredentials: true }
     );
     const options = {
       key: data.key,
@@ -85,7 +85,8 @@ const userId = userData._id||userData.id;
             })),
             totalPrice: total,
             pickupTable: tableNumber,
-          }
+          },
+  { withCredentials: true }
         );
         alert("Order placed successfully!");
       },
