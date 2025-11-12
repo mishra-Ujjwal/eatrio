@@ -1,11 +1,12 @@
 import express from "express";
-import { loginOwner, logoutOwner, registerOwner } from "../contollers/owner.controller.js";
+import { logoutOwner, ownerLogin, registerOwner } from "../contollers/owner.controller.js";
 import { protectOwner } from "../middleware/protectOwner.js";
 import ownerModel from "../models/owner.model.js";
 
+
 const ownerRouter = express.Router();
 ownerRouter.post("/register", registerOwner);
-ownerRouter.post("/login", loginOwner);
+ownerRouter.post("/login", ownerLogin);
 ownerRouter.post("/logout", logoutOwner);
 ownerRouter.get("/me", protectOwner, async (req, res) => {
   try {

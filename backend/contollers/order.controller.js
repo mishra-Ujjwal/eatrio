@@ -1,4 +1,5 @@
 import Order from "../models/order.model.js";
+import restaurantModel from "../models/restaurant.model.js";
 
 export const getUserOrders = async (req, res) => {
   try {
@@ -32,5 +33,36 @@ export const getOrderById = async (req, res) => {
   } catch (err) {
     console.error("Error fetching order:", err);
     res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+export const getRestaurantOrders = async (req, res) => {
+  try {
+    const ownerId = req.owner._id;
+
+    // 🏪 Find restaurant(s) owned by this owner
+    const restaurants = await restaurantModel.find({ owner: ownerId }).select("_id");
+
+    if (!restaurants.length)
+      return res.status(404).json({ success: false, message: "No restaurant found for this owner" });
+
+    // 🧾 Fetch all orders linked to those restaurant IDs
+    const restaurantIds = restaurants.map((r) => r._id);
+
+    const orders = await Order.find({ restaurant: { $in: restaurantIds } })
+      .populate("user", "name email")
+      .populate("restaurant", "name image")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: orders.length,
+      orders,
+    });
+  } catch (err) {
+    console.error("Error fetching restaurant orders:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching restaurant orders",
+    });
   }
 };

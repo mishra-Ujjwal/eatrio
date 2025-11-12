@@ -30,27 +30,39 @@ export const registerOwner = async (req, res) => {
 
     const token = generateToken(owner._id);
 
-    const populatedOwner = await Owner.findById(owner._id).populate("restaurant");
+    const populatedOwner = await Owner.findById(owner._id).populate(
+      "restaurant"
+    );
 
     // ✅ Always allow cross-domain cookie (for Render/Vercel frontend)
-    res
-      .cookie("ownerToken", token, {
+    if (process.env.NODE_ENV === "production") {
+      res.cookie("token", token, {
         httpOnly: true,
-        secure: true, // ✅ required for HTTPS (Render)
-        sameSite: "none", // ✅ required for cross-site cookie
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      })
-      .status(201)
-      .json({
-        success: true,
-        message: "Owner registered successfully.",
-        owner: {
-          id: populatedOwner._id,
-          name: populatedOwner.name,
-          email: populatedOwner.email,
-          restaurant: populatedOwner.restaurant,
-        },
+        secure: true, // required for SameSite=None
+        sameSite: "None", // allow cross-site cookie
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        path: "/", // make cookie accessible across routes
       });
+    } else {
+      // For localhost/dev
+      res.cookie("ownerToken", token, {
+        httpOnly: true,
+        sameSite: "Lax",
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        path: "/",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Owner registered successfully.",
+      owner: {
+        id: populatedOwner._id,
+        name: populatedOwner.name,
+        email: populatedOwner.email,
+        restaurant: populatedOwner.restaurant,
+      },
+    });
   } catch (err) {
     console.error("Register Error:", err);
     res.status(500).json({ message: "Server error", error: err.message });
@@ -58,56 +70,40 @@ export const registerOwner = async (req, res) => {
 };
 
 // ✅ Login Owner
-export const loginOwner = async (req, res) => {
+export const ownerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password)
-      return res.status(400).json({ message: "Email and password required" });
-
-    const owner = await Owner.findOne({ email }).populate("restaurant");
-    if (!owner)
-      return res.status(400).json({ message: "Invalid email or password" });
-
-    const isMatch = await bcrypt.compare(password, owner.password);
-    if (!isMatch)
-      return res.status(400).json({ message: "Invalid email or password" });
-
-    const token = generateToken(owner._id);
-
-    // Check subscription
-    if (
-      owner.subscription.active &&
-      new Date() > new Date(owner.subscription.endDate)
-    ) {
-      owner.subscription.active = false;
-      await owner.save();
-      return res
-        .status(403)
-        .json({ message: "Your subscription has expired. Please renew." });
+    const owner = await Owner.findOne({ email });
+    if (!owner) {
+      return res.status(404).json({ success: false, message: "Owner not found" });
     }
 
-    res
-      .cookie("ownerToken", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      })
-      .status(200)
-      .json({
-        success: true,
-        message: "Login successful",
-        owner: {
-          id: owner._id,
-          name: owner.name,
-          email: owner.email,
-          subscription: owner.subscription,
-          restaurant: owner.restaurant,
-        },
-      });
+    const isMatch = await bcrypt.compare(password, owner.password);
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign({ id: owner._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    // ✅ Correct secure cookie settings for Render (HTTPS)
+    res.cookie("ownerToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // only secure in prod
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // allow cross-origin cookies
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: "/", // ensure available to all routes
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      owner: { id: owner._id, name: owner.name, email: owner.email },
+    });
   } catch (err) {
-    console.error("Login Error:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    console.error("Error during owner login:", err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
