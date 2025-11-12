@@ -39,10 +39,6 @@ const userId = userData._id||userData.id;
     dispatch(removeFromCartDB({ restaurantId, name: item.name }));
   };
 
-  const handleClear = () => {
-    dispatch(clearCartLocal());
-    dispatch(clearCartDB(restaurantId));
-  };
 
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const handleCheckout = async () => {
@@ -89,6 +85,9 @@ const userId = userData._id||userData.id;
   { withCredentials: true }
         );
         alert("Order placed successfully!");
+        navigate("/user-orders");
+        dispatch(clearCartLocal());
+         dispatch(clearCartDB(restaurantId));
       },
       theme: { color: "#F37254" },
     };
