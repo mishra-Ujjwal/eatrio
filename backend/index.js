@@ -40,7 +40,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
+app.options("*", cors());
 
 // 🚏 API Routes
 app.use("/user", userRouter);
