@@ -12,7 +12,9 @@ export const registerUser = async (req, res) => {
     const { name, email, password, role, location } = req.body;
 
     if (!name || !email || !password)
-      return res.status(400).json({ message: "Name, email, and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Name, email, and password are required" });
 
     const userExists = await User.findOne({ email });
     if (userExists)
@@ -27,15 +29,18 @@ export const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       role: role || "user",
-      location: location || { latitude: null, longitude: null, text: "" }
+      location: location || { latitude: null, longitude: null, text: "" },
     });
-     const token= generateToken(user._id);
-     res.cookie("token", token, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-  maxAge: 30 * 24 * 60 * 60 * 1000,
-});
+    const token = generateToken(user._id);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    };
+
+    res.cookie("token", token, cookieOptions);
+
     res.status(201).json({
       success: true,
       user: {
@@ -43,37 +48,41 @@ export const registerUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        location: user.location
+        location: user.location,
       },
-      token: generateToken(user._id)
+      token: generateToken(user._id),
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password)
-      return res.status(400).json({ message: "Email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: "Invalid email or password" });
+    if (!user)
+      return res.status(401).json({ message: "Invalid email or password" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid email or password" });
-      const token= generateToken(user._id)
+    if (!isMatch)
+      return res.status(401).json({ message: "Invalid email or password" });
+    const token = generateToken(user._id);
 
-     res.cookie("token", token, {
+     const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      sameSite: "Strict"
-    });
+    };
 
+    res.cookie("token", token, cookieOptions);
     res.json({
       success: true,
       user: {
@@ -81,9 +90,9 @@ export const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        location: user.location
+        location: user.location,
       },
-      token: generateToken(user._id)
+      token: generateToken(user._id),
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -109,12 +118,11 @@ export const logoutUser = async (req, res) => {
   }
 };
 
-
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
-    
+
     res.json({ success: true, user });
   } catch (error) {
     res.status(500).json({ message: error.message });
