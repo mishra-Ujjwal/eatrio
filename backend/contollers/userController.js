@@ -32,12 +32,23 @@ export const registerUser = async (req, res) => {
       location: location || { latitude: null, longitude: null, text: "" },
     });
     const token = generateToken(user._id);
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // ✅ required on Render
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // ✅ allow cross-site cookies
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
+    if (process.env.NODE_ENV === "production") {
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true, // required for SameSite=None
+    sameSite: "None", // allow cross-site cookie
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    path: "/", // make cookie accessible across routes
+  });
+} else {
+  // For localhost/dev
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "Lax",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    path: "/",
+  });
+}
 
     res.status(201).json({
       success: true,
@@ -73,12 +84,23 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     const token = generateToken(user._id);
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // ✅ required on Render
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // ✅ allow cross-site cookies
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
+    if (process.env.NODE_ENV === "production") {
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true, // required for SameSite=None
+    sameSite: "None", // allow cross-site cookie
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    path: "/", // make cookie accessible across routes
+  });
+} else {
+  // For localhost/dev
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "Lax",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    path: "/",
+  });
+}
     res.json({
       success: true,
       user: {
