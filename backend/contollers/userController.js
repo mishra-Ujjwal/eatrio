@@ -32,25 +32,23 @@ export const registerUser = async (req, res) => {
       location: location || { latitude: null, longitude: null, text: "" },
     });
     const token = generateToken(user._id);
-    const cookieOptions = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    };
-
-    res.cookie("token", token, cookieOptions);
+    res.cookie("token", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // ✅ Only HTTPS in production
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+});
 
     res.status(201).json({
       success: true,
       user: {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
         location: user.location,
       },
-      token: generateToken(user._id),
+      token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -86,13 +84,13 @@ export const loginUser = async (req, res) => {
     res.json({
       success: true,
       user: {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
         location: user.location,
       },
-      token: generateToken(user._id),
+      token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
