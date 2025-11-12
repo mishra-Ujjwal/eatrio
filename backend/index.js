@@ -29,15 +29,18 @@ app.use(express.json());
 app.use(cookieParser());
 app.set("trust proxy", 1);
 
-// 🧠 CORS Setup
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://eatrio.onrender.com", // ✅ your production frontend
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 // 🚏 API Routes
 app.use("/user", userRouter);

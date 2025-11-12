@@ -33,11 +33,11 @@ export const registerUser = async (req, res) => {
     });
     const token = generateToken(user._id);
     res.cookie("token", token, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // ✅ Only HTTPS in production
-  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-  maxAge: 30 * 24 * 60 * 60 * 1000,
-});
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // ✅ required on Render
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // ✅ allow cross-site cookies
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
 
     res.status(201).json({
       success: true,
@@ -73,14 +73,12 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     const token = generateToken(user._id);
 
-     const cookieOptions = {
+    res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    };
-
-    res.cookie("token", token, cookieOptions);
+      secure: process.env.NODE_ENV === "production", // ✅ required on Render
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // ✅ allow cross-site cookies
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
     res.json({
       success: true,
       user: {
