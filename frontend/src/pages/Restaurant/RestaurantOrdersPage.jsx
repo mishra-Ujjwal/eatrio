@@ -1,18 +1,35 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaClock, FaTruck, FaCheckCircle, FaTimesCircle, FaUser } from "react-icons/fa";
+import {
+  FaClock,
+  FaTruck,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaUser,
+} from "react-icons/fa";
 
 const statusIcons = {
   pending: <FaClock className="text-yellow-500" />,
   preparing: <FaTruck className="text-blue-500" />,
   ready: <FaCheckCircle className="text-green-500" />,
+  completed: <FaCheckCircle className="text-green-600" />,
   cancelled: <FaTimesCircle className="text-red-500" />,
 };
+
+const statusLabels = [
+  { key: "all", label: "All Orders" },
+  { key: "pending", label: "Pending" },
+  { key: "preparing", label: "Preparing" },
+  { key: "ready", label: "Ready" },
+  { key: "completed", label: "Completed" },
+  { key: "cancelled", label: "Cancelled" },
+];
 
 const RestaurantOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(null);
+  const [activeStatus, setActiveStatus] = useState("all");
 
   const fetchOrders = async () => {
     try {
@@ -74,21 +91,58 @@ const RestaurantOrdersPage = () => {
       </section>
     );
 
+  // Filter logic
+  const filteredOrders =
+    activeStatus === "all"
+      ? orders
+      : orders.filter((order) => order.status === activeStatus);
+
   return (
     <section className="p-6 min-h-screen bg-gray-50">
       <h2 className="text-3xl font-bold mb-6">Restaurant Orders</h2>
 
-      {orders.length === 0 ? (
-        <p className="text-gray-500 text-lg">No orders received yet.</p>
+      {/* 🔘 Filter Buttons */}
+      <div className="flex flex-wrap gap-3 mb-8">
+        {statusLabels.map(({ key, label }) => {
+          const count =
+            key === "all"
+              ? orders.length
+              : orders.filter((o) => o.status === key).length;
+
+          return (
+            <div
+              key={key}
+              onClick={() => setActiveStatus(key)}
+              className={`px-5 py-2 rounded-full font-medium border transition-all ${
+                activeStatus === key
+                  ? "bg-green-600 text-white shadow-md"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {label} ({count})
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 🧾 Orders Display */}
+      {filteredOrders.length === 0 ? (
+        <p className="text-gray-500 text-lg">
+          No {activeStatus === "all" ? "orders" : activeStatus + " orders"} found.
+        </p>
       ) : (
         <div className="space-y-6">
-          {orders.map((order) => (
-            <div key={order._id} className="bg-white rounded-2xl shadow-sm p-6">
-              {/* 🧾 Order Header */}
+          {filteredOrders.map((order) => (
+            <div
+              key={order._id}
+              className="bg-white rounded-2xl shadow-sm p-6"
+            >
+              {/* Header */}
               <div className="flex justify-between items-center border-b pb-3 mb-4">
                 <div>
                   <h3 className="font-semibold text-lg text-gray-800">
-                    Order ID: <span className="text-gray-600">{order.orderNumber}</span>
+                    Order ID:{" "}
+                    <span className="text-gray-600">{order.orderNumber}</span>
                   </h3>
                   <p className="text-sm text-gray-500">
                     Placed on:{" "}
@@ -107,7 +161,7 @@ const RestaurantOrdersPage = () => {
                 </div>
               </div>
 
-              {/* 👤 User Info */}
+              {/* User Info */}
               <div className="flex items-center gap-2 text-gray-700 mb-3">
                 <FaUser className="text-gray-500" />
                 <p>
@@ -115,7 +169,7 @@ const RestaurantOrdersPage = () => {
                 </p>
               </div>
 
-              {/* 🍔 Items List */}
+              {/* Items */}
               <div className="space-y-3 divide-y divide-gray-100">
                 {order.items.map((item, i) => (
                   <div
@@ -130,9 +184,7 @@ const RestaurantOrdersPage = () => {
                       />
                       <div>
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-500">
-                          x{item.quantity}
-                        </p>
+                        <p className="text-sm text-gray-500">x{item.quantity}</p>
                       </div>
                     </div>
                     <p className="text-green-600 font-semibold">
@@ -142,7 +194,7 @@ const RestaurantOrdersPage = () => {
                 ))}
               </div>
 
-              {/* 💳 Footer Section */}
+              {/* Footer */}
               <div className="flex justify-between items-center mt-4">
                 <p className="text-gray-600">
                   Payment:{" "}
@@ -155,7 +207,7 @@ const RestaurantOrdersPage = () => {
                 </p>
               </div>
 
-              {/* ⚙️ Status Dropdown */}
+              {/* Status Dropdown */}
               <div className="mt-4 flex justify-end">
                 <select
                   className="border rounded-lg px-4 py-2 text-gray-700 cursor-pointer"

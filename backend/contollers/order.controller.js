@@ -66,3 +66,27 @@ export const getRestaurantOrders = async (req, res) => {
     });
   }
 };
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ["pending", "preparing", "ready", "completed", "cancelled"];
+    if (!validStatuses.includes(status))
+      return res.status(400).json({ success: false, message: "Invalid status" });
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedOrder)
+      return res.status(404).json({ success: false, message: "Order not found" });
+
+    res.status(200).json({ success: true, order: updatedOrder });
+  } catch (err) {
+    console.error("Error updating order status:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

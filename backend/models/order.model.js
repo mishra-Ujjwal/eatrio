@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema({
+   orderNumber: {
+      type: String,
+      unique: true,
+
+    },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   restaurant: { type: mongoose.Schema.Types.ObjectId, ref: "Restaurant", required: true },
   items: [
@@ -34,5 +39,29 @@ const OrderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
+
+OrderSchema.pre("save", async function (next) {
+  if (!this.orderNumber) {
+    let unique = false;
+    let generatedCode = "";
+
+    while (!unique) {
+      // Generate 5-character alphanumeric code
+      const random = Math.random().toString(36).substring(2, 7).toUpperCase();
+      generatedCode = `#${random}`;
+
+      // Check if it already exists
+      const existingOrder = await mongoose.models.Order.findOne({ orderNumber: generatedCode });
+      if (!existingOrder) {
+        unique = true;
+      }
+    }
+
+    this.orderNumber = generatedCode;
+  }
+
+  next();
+});
+
 
 export default mongoose.model("Order", OrderSchema);
