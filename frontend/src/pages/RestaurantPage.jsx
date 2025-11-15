@@ -89,16 +89,16 @@ const RestaurantPage = () => {
         </h2>
          
         <div className="relative">
-          <button
+          <div
             onClick={(e) => {
               e.stopPropagation();
               setMenuOpen((prev) => !prev);
             }}
-            className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-full hover:bg-gray-200 transition"
+            className="cursor-pointer flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-full hover:bg-gray-200 transition"
           >
             <FaUserCircle className="text-2xl text-gray-700" />
             <FiMenu className="text-lg text-gray-600" />
-          </button>
+          </div>
 
           {menuOpen && (
             <div
@@ -114,13 +114,15 @@ const RestaurantPage = () => {
                 </p>
               </div>
               <hr className="my-2" />
-              <button
+              <h2 className="my-2 font-semibold text-base cursor-pointer" onClick={()=>{navigate("/user-orders")}}>My Orders</h2>
+
+              <div
                 onClick={handleLogout}
                 className="flex items-center gap-2 w-full text-left text-red-600 hover:text-red-700 font-semibold transition"
               >
                 <FiLogOut />
                 Logout
-              </button>
+              </div>
             </div>
           )}
         </div>

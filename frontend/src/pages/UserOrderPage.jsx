@@ -68,7 +68,7 @@ const UserOrderPage = () => {
 
   if (loading) {
     return (
-      <section className="p-6 min-h-screen bg-gray-50">
+      <section className="p-6 w-screen min-h-screen bg-gray-50">
         <h2 className="text-3xl font-bold mb-6">My Orders</h2>
         <div className="space-y-5">
           {[1, 2, 3].map((_, i) => (
@@ -80,7 +80,7 @@ const UserOrderPage = () => {
   }
 
   return (
-    <section className="p-6 min-h-screen bg-gray-50">
+    <section className="p-6 w-screen min-h-screen bg-gray-50">
       <h2 className="text-3xl font-bold mb-6">My Orders</h2>
 
       {orders.length === 0 ? (
@@ -114,7 +114,7 @@ const UserOrderPage = () => {
                     <span className="capitalize">{order.status}</span>
                   </div>
                 </div>
-
+ 
                 <div className="space-y-3 divide-y divide-gray-100">
                   {order.items.map((it, i) => (
                     <div
@@ -132,6 +132,7 @@ const UserOrderPage = () => {
                           <p className="text-sm text-gray-500">
                             x{it.quantity}
                           </p>
+
                         </div>
                       </div>
                       <p className="text-green-600 font-semibold">
@@ -140,12 +141,15 @@ const UserOrderPage = () => {
                     </div>
                   ))}
                 </div>
+                          <p className="font-medium text-sm my-1">Table No:{order?.pickupTable}</p>
 
-                <div className="flex justify-between text-sm text-gray-600 mt-3">
+
+                <div className="flex justify-between text-sm items-center text-gray-600 mt-3">
                   <p>
                     Payment:{" "}
                     <span className="font-medium">{order.payment.mode}</span>
                   </p>
+
 
                   <p>
                     Total:{" "}

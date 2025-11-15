@@ -17,13 +17,16 @@ import { Provider } from 'react-redux'
 import Payment from './pages/PaymentPage.jsx'
 import OwnerSignup from './pages/OwnerSignup.jsx'
 import OwnerLogin from './pages/OwnerLogin.jsx'
-import DasboardPage from './pages/Restaurant/DasboardPage.jsx'
+import DasboardPage from './pages/Restaurant/DashboardPage.jsx'
 import OrderPage from './pages/Restaurant/RestaurantOrdersPage.jsx'
 import ProfilePage from './pages/Restaurant/ProfilePage.jsx'
 import RestaurantPage from './pages/RestaurantPage.jsx'
 import AllMenuPage from './pages/AllMenuPage.jsx'
 import CartPage from './pages/CartPage.jsx'
 import UserOrderPage from './pages/UserOrderPage.jsx'
+import KYCPage from './pages/Restaurant/KycPage.jsx'
+import WithdrawPage from './pages/Restaurant/WithdrawPage.jsx'
+import WithdrawHistory from './pages/Restaurant/WithdrawHistory.jsx'
 const router = createBrowserRouter([
   {
     path:"/",
@@ -76,6 +79,9 @@ const router = createBrowserRouter([
       { path: "menu", element: <MenuPage /> },
       { path: "orders", element: <OrderPage /> },
       { path: "profile", element: <ProfilePage /> },
+      {path:"kyc", element:<KYCPage/>},
+      {path:"withdraw",element:<WithdrawPage/>},
+      {path:"withdraw-history",element:<WithdrawHistory/>}
       
     ],
   },

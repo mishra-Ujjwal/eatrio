@@ -140,7 +140,7 @@ const userId = userData._id||userData.id;
     );
 
   return (
-    <section className="p-6 bg-gray-50 min-h-screen">
+    <section className="p-6 w-screen bg-gray-50 min-h-screen">
       <h2 className="text-2xl font-bold mb-6">Your Cart</h2>
 
       <div className="bg-white p-6 rounded-lg shadow mb-6">

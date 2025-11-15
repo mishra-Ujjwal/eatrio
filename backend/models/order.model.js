@@ -1,16 +1,23 @@
 import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema({
-   orderNumber: {
-      type: String,
-      unique: true,
-
-    },
+  orderNumber: {
+    type: String,
+    unique: true,
+  },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  restaurant: { type: mongoose.Schema.Types.ObjectId, ref: "Restaurant", required: true },
+  restaurant: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Restaurant",
+    required: true,
+  },
   items: [
     {
-      _id: { type: mongoose.Schema.Types.ObjectId, ref: "MenuItem", required: true }, // menu item id
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "MenuItem",
+        required: true,
+      }, // menu item id
       name: { type: String, required: true },
       price: { type: Number, required: true },
       image: { type: String },
@@ -31,13 +38,37 @@ const OrderSchema = new mongoose.Schema({
   },
   payment: {
     mode: { type: String, enum: ["online", "cash"], default: "cash" },
-    status: { type: String, enum: ["pending", "completed", "failed"], default: "pending" },
+    status: {
+      type: String,
+      enum: ["pending", "completed", "failed"],
+      default: "pending",
+    },
     transactionId: String,
   },
   pickupTable: { type: String, required: true },
   specialInstructions: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+
+  commissionPercentage: {
+    type: Number,
+    default: 3, // 3% default
+  },
+
+  commissionAmount: {
+    type: Number,
+    default: 0,
+  },
+
+  restaurantEarning: {
+    type: Number,
+    default: 0,
+  },
+
+  platformEarning: {
+    type: Number,
+    default: 0,
+  },
 });
 
 OrderSchema.pre("save", async function (next) {
@@ -51,7 +82,9 @@ OrderSchema.pre("save", async function (next) {
       generatedCode = `#${random}`;
 
       // Check if it already exists
-      const existingOrder = await mongoose.models.Order.findOne({ orderNumber: generatedCode });
+      const existingOrder = await mongoose.models.Order.findOne({
+        orderNumber: generatedCode,
+      });
       if (!existingOrder) {
         unique = true;
       }
@@ -62,6 +95,5 @@ OrderSchema.pre("save", async function (next) {
 
   next();
 });
-
 
 export default mongoose.model("Order", OrderSchema);

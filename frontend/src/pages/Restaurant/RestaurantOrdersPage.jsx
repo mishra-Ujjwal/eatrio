@@ -98,7 +98,7 @@ const RestaurantOrdersPage = () => {
       : orders.filter((order) => order.status === activeStatus);
 
   return (
-    <section className="p-6 min-h-screen bg-gray-50">
+    <section className="p-4 min-h-screen bg-gray-50">
       <h2 className="text-3xl font-bold mb-6">Restaurant Orders</h2>
 
       {/* 🔘 Filter Buttons */}
@@ -113,7 +113,7 @@ const RestaurantOrdersPage = () => {
             <div
               key={key}
               onClick={() => setActiveStatus(key)}
-              className={`px-5 py-2 rounded-full font-medium border transition-all ${
+              className={`px-5 py-2 cursor-pointer rounded-full font-medium border transition-all ${
                 activeStatus === key
                   ? "bg-green-600 text-white shadow-md"
                   : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -135,15 +135,18 @@ const RestaurantOrdersPage = () => {
           {filteredOrders.map((order) => (
             <div
               key={order._id}
-              className="bg-white rounded-2xl shadow-sm p-6"
+              className="bg-white rounded-2xl shadow-sm p-4"
             >
               {/* Header */}
               <div className="flex justify-between items-center border-b pb-3 mb-4">
                 <div>
+                  <div>
                   <h3 className="font-semibold text-lg text-gray-800">
                     Order ID:{" "}
                     <span className="text-gray-600">{order.orderNumber}</span>
                   </h3>
+                  <p className="font-bold text-xl">Table No: {order.pickupTable}</p>
+                  </div>
                   <p className="text-sm text-gray-500">
                     Placed on:{" "}
                     {new Date(order.createdAt).toLocaleString("en-IN", {

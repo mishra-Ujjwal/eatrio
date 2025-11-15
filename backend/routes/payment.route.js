@@ -4,6 +4,7 @@ import crypto from "crypto";
 import Owner from "../models/owner.model.js";
 import Restaurant from "../models/restaurant.model.js";
 import orderModel from "../models/order.model.js";
+import Wallet from "../models/wallet.model.js";
 
 
 const paymentRouter = express.Router();
@@ -111,19 +112,19 @@ paymentRouter.post("/verify-payment", async (req, res) => {
   }
 });
 
-// for customer
-// 🛒 Create Razorpay Order for Customer Checkout
+
 paymentRouter.post("/create-order-customer", async (req, res) => {
   try {
     const { amount } = req.body;
 
     const options = {
-      amount: amount * 100, // Razorpay expects amount in paise
+      amount: amount * 100,
       currency: "INR",
       receipt: "cust_order_" + Date.now(),
     };
 
     const order = await razorpay.orders.create(options);
+
     res.status(200).json({
       success: true,
       orderId: order.id,
@@ -137,10 +138,8 @@ paymentRouter.post("/create-order-customer", async (req, res) => {
   }
 });
 
-// ✅ Verify Payment & Save Customer Order
 paymentRouter.post("/verify-customer-payment", async (req, res) => {
   try {
-    
     const {
       razorpay_order_id,
       razorpay_payment_id,
@@ -149,10 +148,10 @@ paymentRouter.post("/verify-customer-payment", async (req, res) => {
       restaurantId,
       items,
       totalPrice,
-      pickupTable,   
-     } = req.body;
+      pickupTable,
+    } = req.body;
 
-    // 🧮 Verify signature
+    // 1️⃣ VERIFY SIGNATURE
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -163,28 +162,58 @@ paymentRouter.post("/verify-customer-payment", async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid payment signature" });
     }
 
-    // 💾 Save order
+
+    // 2️⃣ COMMISSION CALCULATION
+    const commissionPercentage = 3; // you can make this dynamic later
+    const commissionAmount = (totalPrice * commissionPercentage) / 100;
+    const restaurantEarning = totalPrice - commissionAmount;
+
+
+    // 3️⃣ CREATE ORDER
     const newOrder = new orderModel({
       user: userId,
       restaurant: restaurantId,
       items,
       totalPrice,
       pickupTable,
+      status: "pending",
       payment: {
         mode: "online",
         status: "completed",
         transactionId: razorpay_payment_id,
       },
-      status: "pending",
+
+      // commission fields
+      commissionPercentage,
+      commissionAmount,
+      restaurantEarning,
+      platformEarning: commissionAmount,
     });
 
     await newOrder.save();
 
+
+    // 4️⃣ UPDATE WALLET OF RESTAURANT
+    let wallet = await Wallet.findOne({ restaurantId: restaurantId });
+
+    if (!wallet) {
+      wallet = new Wallet({ restaurantId: restaurantId });
+    }
+
+    wallet.availableBalance += restaurantEarning;
+    wallet.totalEarnings += totalPrice;
+    wallet.totalCommission += commissionAmount;
+
+    await wallet.save();
+
+
+    // 5️⃣ RESPONSE TO CLIENT
     res.status(200).json({
       success: true,
-      message: "Payment verified successfully and order placed!",
+      message: "Payment verified, order placed, wallet updated",
       order: newOrder,
     });
+
   } catch (error) {
     console.error("Customer payment verification failed:", error);
     res.status(500).json({ message: "Payment verification failed", error: error.message });

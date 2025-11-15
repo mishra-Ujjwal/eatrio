@@ -120,6 +120,7 @@ const UserPage = () => {
                 <p className="text-sm text-gray-500">{user?.email || "No email"}</p>
               </div>
               <hr className="my-2" />
+              <h2 className="my-2 font-semibold text-base cursor-pointer" onClick={()=>{navigate("/user-orders")}}>My Orders</h2>
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 w-full text-left text-red-600 hover:text-red-700 font-semibold transition"
