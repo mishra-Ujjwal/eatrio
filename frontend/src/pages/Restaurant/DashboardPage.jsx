@@ -146,39 +146,12 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
-        <Card
-          title="Total Orders"
-          value="1,247"
-          sub="+12% from last month"
-          icon={<FaShoppingCart />}
-        />
-        <Card
-          title="Revenue"
-          value="₹24,580"
-          sub="+8% from last month"
-          icon={<FaWallet />}
-        />
-        <Card
-          title="Active Items"
-          value="89"
-          sub="3 items added today"
-          icon={<MdFastfood />}
-        />
-        <Card
-          title="Reviews"
-          value="4.8"
-          sub="(234 reviews)"
-          icon={<FaStar />}
-        />
-      </div>
 
       {/* Wallet Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
         <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col gap-1">
           <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600">Wallet Balance</p>
+            <p className="text-sm text-gray-600">Aailable Balance</p>
             <FaWallet className="text-orange-500 text-xl" />
           </div>
 
@@ -189,6 +162,9 @@ const DashboardPage = () => {
           </p>
           <p className="text-xs text-gray-500">
             Total Withdrawn: ₹{wallet.withdrawnTotal}
+          </p>
+          <p className="text-xs cursor-pointer  text-blue-700" onClick={()=>navigate(`/restaurant-dashboard/${restaurantId}/withdraw-history`)}>
+            Show Transaction History
           </p>
           <button
             onClick={() => {
@@ -201,34 +177,10 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Charts */}
-      <div className="grid md:grid-cols-2 gap-6 mb-6">
-        <ChartBox title="Revenue Trends">
-          <Line
-            data={revenueData}
-            options={{ plugins: { legend: { display: false } } }}
-          />
-        </ChartBox>
-
-        <ChartBox title="Order Distribution">
-          <Doughnut
-            data={orderData}
-            options={{ plugins: { legend: { position: "bottom" } } }}
-          />
-        </ChartBox>
-      </div>
+      
 
       {/* Quick Actions */}
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white p-4 rounded-2xl shadow-sm">
-          <div className="flex justify-between mb-3">
-            <h2 className="text-lg font-semibold">Recent Orders</h2>
-            <button className="text-orange-500 text-sm font-medium">
-              View All
-            </button>
-          </div>
-        </div>
-
         <div className="bg-white p-4 rounded-2xl shadow-sm">
           <h2 className="text-lg font-semibold mb-3">Quick Actions</h2>
 

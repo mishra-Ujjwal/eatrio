@@ -16,7 +16,7 @@ const WithdrawHistory = () => {
         `${import.meta.env.VITE_BACKEND_URL}/withdraw/history`,
         { withCredentials: true }
       );
-
+console.log(res.data)
       if (res.data.success) setHistory(res.data.history);
     } catch (err) {
       console.error(err);

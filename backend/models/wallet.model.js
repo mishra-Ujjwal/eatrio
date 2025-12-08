@@ -34,18 +34,8 @@ const walletSchema = new mongoose.Schema(
         accountNumber: String,
         ifsc: String,
         bankName: String,
-        panNumber: String,
-        isDefault: { type: Boolean, default: false },
+        mobileNumber: String,
         createdAt: { type: Date, default: Date.now },
-      },
-    ],
-
-    withdrawHistory: [
-      {
-        amount: Number,
-        status: String,
-        date: Date,
-        payoutId: String,
       },
     ],
   },

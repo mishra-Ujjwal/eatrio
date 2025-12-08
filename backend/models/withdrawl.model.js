@@ -15,7 +15,7 @@ const withdrawalSchema = new mongoose.Schema(
     },
 
     amount: {
-      type: Number,
+      type: Number, 
       required: true,
     },
 
@@ -26,7 +26,15 @@ const withdrawalSchema = new mongoose.Schema(
     },
 
     transactionId: {
-      type: String, // Razorpay payout ID
+      type: String,
+    },
+
+    bankDetails: {
+      accountHolderName: String,
+      accountNumber: String,
+      ifsc: String,
+      bankName: String,
+      panNumber: String,
     },
   },
   { timestamps: true }

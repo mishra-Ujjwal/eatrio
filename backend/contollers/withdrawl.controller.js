@@ -5,31 +5,20 @@ import Withdrawal from "../models/withdrawl.model.js";
 
 export const ownerWithdraw = async (req, res) => {
   try {
-    const { restaurantId, amount } = req.body;
+    const { restaurantId, amount, bankAccountId } = req.body;
 
     const wallet = await Wallet.findOne({ restaurantId });
-
     if (!wallet)
       return res.status(404).json({ success: false, message: "Wallet not found" });
 
-    // 😎 Must have at least 1 bank account
-    if (wallet.bankAccounts.length === 0)
+    const selectedBank = wallet.bankAccounts.id(bankAccountId);
+    if (!selectedBank)
       return res.status(400).json({
         success: false,
-        message: "Add at least one bank account before withdrawing.",
-      });
-
-    // ✔ Find default bank account
-    const defaultBank = wallet.bankAccounts.find((a) => a.isDefault);
-
-    if (!defaultBank)
-      return res.status(400).json({
-        success: false,
-        message: "Please set a default bank account.",
+        message: "Please select a valid bank account.",
       });
 
     const withdrawAmount = Number(amount);
-
     if (wallet.availableBalance < withdrawAmount)
       return res.status(400).json({
         success: false,
@@ -38,16 +27,18 @@ export const ownerWithdraw = async (req, res) => {
 
     const payoutId = "test_payout_" + Date.now();
 
+    // 1️⃣ Create withdrawal entry in Withdrawal model
+    const newWithdraw = await Withdrawal.create({
+      restaurantId,
+      walletId: wallet._id,
+      amount: withdrawAmount,
+      transactionId: payoutId,
+      status: "pending",
+    });
+
+    // 2️⃣ Update wallet
     wallet.availableBalance -= withdrawAmount;
     wallet.withdrawnTotal += withdrawAmount;
-
-    wallet.withdrawHistory.push({
-      amount: withdrawAmount,
-      status: "success",
-      date: new Date(),
-      payoutId,
-      bankUsed: defaultBank,
-    });
 
     await wallet.save();
 
@@ -55,6 +46,7 @@ export const ownerWithdraw = async (req, res) => {
       success: true,
       message: "Withdrawal Successful",
       payoutId,
+      withdrawal: newWithdraw,
       wallet,
     });
 
