@@ -12,6 +12,7 @@ import {
   removeFromCartLocal,
 } from "../redux/cartSlice";
 import { capitalizeFirstLetter } from "../utils/CapitalizeFirstLetter";
+import { clearUserData } from "../redux/userSlice";
 
 const SkeletonCard = () => (
   <div className="bg-gray-200 animate-pulse rounded-lg w-full h-52 mb-3"></div>
@@ -66,9 +67,17 @@ const RestaurantPage = () => {
   };
 
   useEffect(() => {
-    getRestaurantMenu();
-    dispatch(fetchCartDB(id));
-  }, [id, dispatch]);
+
+  // ✅ Production auth guard
+  if (!userData) {
+    navigate("/login");
+    return;
+  }
+
+  getRestaurantMenu();
+  dispatch(fetchCartDB(id));
+
+}, [id, dispatch, userData]);
 
   const handleAdd = (item) => {
     const newItem = { ...item, restaurantId: id, quantity: 1 };
@@ -124,7 +133,7 @@ const RestaurantPage = () => {
 
               <div
                 onClick={handleLogout}
-                className="flex items-center gap-2 w-full text-left text-red-600 hover:text-red-700 font-semibold transition"
+                className="flex cursor-pointer items-center gap-2 w-full text-left text-red-600 hover:text-red-700 font-semibold transition"
               >
                 <FiLogOut />
                 Logout
