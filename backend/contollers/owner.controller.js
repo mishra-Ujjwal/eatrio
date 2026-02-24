@@ -36,7 +36,7 @@ export const registerOwner = async (req, res) => {
 
     // ✅ Always allow cross-domain cookie (for Render/Vercel frontend)
     if (process.env.NODE_ENV === "production") {
-      res.cookie("token", token, {
+      res.cookie("ownerToken", token, {
         httpOnly: true,
         secure: true, // required for SameSite=None
         sameSite: "None", // allow cross-site cookie

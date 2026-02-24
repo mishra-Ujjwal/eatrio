@@ -158,7 +158,6 @@ const UserOrderPage = () => {
                     </span>
                   </p>
                 </div>
-
                 <p className="text-sm text-gray-400 mt-2">
                   Ordered on {formattedDate} at {formattedTime}
                 </p>

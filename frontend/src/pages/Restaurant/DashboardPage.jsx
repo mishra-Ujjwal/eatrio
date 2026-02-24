@@ -177,8 +177,6 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      
-
       {/* Quick Actions */}
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-white p-4 rounded-2xl shadow-sm">
