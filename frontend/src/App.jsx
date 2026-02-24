@@ -16,6 +16,8 @@ function App() {
   const userData = useSelector((state)=>state.user.userData)
 
 
+  console.log(userData)
+
   return (
     <section className="flex min-h-screen">
       <Header />

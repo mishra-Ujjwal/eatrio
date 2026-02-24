@@ -36,9 +36,15 @@ const RestaurantPage = () => {
   const { items } = useSelector((state) => state.cart);
   const user = useSelector((state) => state.auth?.user); // add this if you store user in redux
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/logout`, {}, { withCredentials: true });
+      localStorage.removeItem("userData");
+      dispatch(clearUserData());
+      navigate("/");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
   };
 
   const getRestaurantMenu = async () => {
