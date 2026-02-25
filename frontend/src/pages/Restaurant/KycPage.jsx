@@ -295,7 +295,7 @@ outline-none"
 <button
 onClick={handleAddBank}
 
-className="w-full bg-green-600 text-white py-3
+className="w-full !bg-green-600 text-white py-3
 rounded-xl font-semibold
 hover:bg-green-700 transition"
 >
@@ -345,7 +345,7 @@ focus:ring-2 focus:ring-green-500 outline-none"
 
 onClick={handleWithdraw}
 
-className="w-full bg-emerald-600 text-white py-3
+className="w-full !bg-emerald-600 text-white py-3
 rounded-xl font-semibold
 hover:bg-emerald-700 transition"
 >
