@@ -120,82 +120,257 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="p-6 w-full bg-gray-50 min-h-screen">
-      {/* Header & QR Code */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h2 className="text-2xl font-semibold">Dashboard Overview</h2>
+  <div className="p-8 w-full bg-gray-100 min-h-screen">
 
-        <div className="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-4">
-          <div ref={qrRef}>
-            <QRCodeCanvas value={menuUrl} size={100} includeMargin={true} />
-          </div>
+    {/* Header */}
+    <div className="mb-6">
+      <h1 className="text-3xl font-bold text-gray-800">
+        Dashboard Overview
+      </h1>
+
+      <p className="text-gray-500">
+        Welcome back! Here's what's happening with your store.
+      </p>
+    </div>
+
+
+    {/* Top Cards */}
+    <div className="grid md:grid-cols-2 gap-6 mb-6">
+
+      {/* QR CARD */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+
+        <div className="flex justify-between items-center mb-3">
 
           <div>
-            <h2 className="font-semibold text-gray-700 text-sm">
-              {capitalizeFirstLetter(restaurantName)}
+            <h2 className="font-semibold text-lg">
+              Your Store QR Code
             </h2>
-            <p className="text-xs text-gray-500">Scan And Order</p>
+
+            <p className="text-gray-500 text-sm">
+              Customers can scan to view your menu
+            </p>
+          </div>
+
+          <span className="bg-orange-100 text-orange-600 text-xs px-3 py-1 rounded-full">
+            Active
+          </span>
+
+        </div>
+
+
+        <div className="flex items-center gap-6 mt-4">
+
+          <div
+            ref={qrRef}
+            className="p-3 border rounded-xl"
+          >
+            <QRCodeCanvas
+              value={menuUrl}
+              size={110}
+            />
+          </div>
+
+
+          <div>
+
+            <h3 className="font-semibold text-gray-700">
+
+              {capitalizeFirstLetter(restaurantName)}
+
+            </h3>
+
+            <p className="text-gray-500 text-sm">
+
+              Scan and Order
+
+            </p>
+
 
             <button
               onClick={downloadQR}
-              className="flex items-center gap-2 mt-2 bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 rounded-md transition"
+              className="mt-4 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-sm flex items-center gap-2"
             >
-              <FaDownload /> Download QR
+
+              <FaDownload />
+
+              Download QR Code
+
             </button>
-          </div>
-        </div>
-      </div>
 
-
-      {/* Wallet Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
-        <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col gap-1">
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600">Aailable Balance</p>
-            <FaWallet className="text-orange-500 text-xl" />
           </div>
 
-          <h3 className="text-2xl font-semibold">₹{wallet.availableBalance}</h3>
-
-          <p className="text-xs text-gray-500">
-            Commission Deducted: ₹{wallet.totalCommission}
-          </p>
-          <p className="text-xs text-gray-500">
-            Total Withdrawn: ₹{wallet.withdrawnTotal}
-          </p>
-          <p className="text-xs cursor-pointer  text-blue-700" onClick={()=>navigate(`/restaurant-dashboard/${restaurantId}/withdraw-history`)}>
-            Show Transaction History
-          </p>
-          <button
-            onClick={() => {
-              navigate(`/restaurant-dashboard/${restaurantId}/kyc`);
-            }}
-            className="mt-3 bg-orange-500 text-white px-4 py-2 rounded-lg text-sm"
-          >
-            {wallet.kyc?.verified ? "Withdraw Money" : "Complete KYC"}
-          </button>
         </div>
+
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white p-4 rounded-2xl shadow-sm">
-          <h2 className="text-lg font-semibold mb-3">Quick Actions</h2>
 
-          <ActionButton
-            icon={<FaShoppingCart />}
-            text="View Orders"
-            sub="Check recent orders"
-            onClick={() =>
-              navigate(`/restaurant-dashboard/${restaurantId}/orders`)
-            }
-          />
+
+      {/* WALLET CARD */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm">
+
+        <div className="flex justify-between items-center mb-4">
+
+          <h2 className="font-semibold">
+
+            Available Balance
+
+          </h2>
+
+          <FaWallet className="text-xl text-green-600"/>
+
         </div>
+
+
+        <h1 className="text-3xl font-bold">
+
+          ₹{wallet.availableBalance}
+
+        </h1>
+
+
+        <div className="mt-4 text-sm text-gray-600">
+
+          <div className="flex justify-between">
+
+            <span>Commission Deducted</span>
+
+            <span>
+
+              ₹{wallet.totalCommission}
+
+            </span>
+
+          </div>
+
+
+          <div className="flex justify-between mt-2">
+
+            <span>Total Withdrawn</span>
+
+            <span>
+
+              ₹{wallet.withdrawnTotal}
+
+            </span>
+
+          </div>
+
+        </div>
+
+
+
+        <p
+          onClick={() =>
+            navigate(`/restaurant-dashboard/${restaurantId}/withdraw-history`)
+          }
+          className="mt-4 text-green-600 cursor-pointer text-sm"
+        >
+          Show Transaction History →
+        </p>
+
+
+        <button
+          onClick={() =>
+            navigate(`/restaurant-dashboard/${restaurantId}/kyc`)
+          }
+          className="mt-4 w-full bg-gray-100 py-3 rounded-lg text-gray-600"
+        >
+
+          {wallet.kyc?.verified
+            ? "Withdraw Money"
+            : "Complete KYC to Withdraw"}
+
+        </button>
+
+
       </div>
+
     </div>
-  );
+
+
+
+    {/* QUICK ACTIONS */}
+    <div className="bg-white rounded-2xl p-6 shadow-sm">
+
+      <h2 className="font-semibold text-lg mb-4">
+
+        Quick Actions
+
+      </h2>
+
+
+      <div className="grid md:grid-cols-4 gap-5">
+
+
+        <ActionCard
+          icon={<FaShoppingCart />}
+          title="View Orders"
+          sub="Check recent orders"
+          onClick={() =>
+            navigate(`/restaurant-dashboard/${restaurantId}/orders`)
+          }
+        />
+
+
+        <ActionCard
+          icon={<MdFastfood />}
+          title="Manage Menu"
+          sub="Add or edit items"
+          onClick={() =>
+            navigate(`/restaurant-dashboard/${restaurantId}/menu`)
+          }
+        />
+
+
+        <ActionCard
+          icon={<FaStar />}
+          title="Analytics"
+          sub="View store insights"
+        />
+
+
+        <ActionCard
+          icon={<FaWallet />}
+          title="Get Support"
+          sub="Contact help desk"
+        />
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+);
 };
 
+const ActionCard = ({icon,title,sub,onClick}) => {
+
+return(
+
+<div
+onClick={onClick}
+className="bg-gray-50 p-5 rounded-xl cursor-pointer hover:shadow-md transition"
+>
+
+<div className="text-2xl text-orange-500 mb-3">
+{icon}
+</div>
+
+<h3 className="font-semibold">
+{title}
+</h3>
+
+<p className="text-sm text-gray-500">
+{sub}
+</p>
+
+</div>
+
+);
+};
 // ----------------------------
 // Reusable UI Components
 // ----------------------------
