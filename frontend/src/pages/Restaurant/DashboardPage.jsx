@@ -222,11 +222,11 @@ const DashboardPage = () => {
         </div>
 
 
-        <h1 className="text-3xl font-bold">
+        <h2 className="text-3xl font-bold">
 
           ₹{wallet.availableBalance}
 
-        </h1>
+        </h2>
 
 
         <div className="mt-4 text-sm text-gray-600">
