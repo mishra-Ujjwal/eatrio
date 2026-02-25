@@ -292,7 +292,7 @@ const handleWithdraw = async () => {
 
         <button
           onClick={handleWithdraw}
-          className="bg-green-600 text-white py-2 px-6 rounded-lg"
+          className="!bg-green-600 !text-white py-2 px-6 rounded-lg"
         >
           {loading ? "Processing..." : "Withdraw"}
         </button>

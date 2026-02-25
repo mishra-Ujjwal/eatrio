@@ -11,6 +11,7 @@ const LoginPage = () => {
     password: "user123",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -20,7 +21,9 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+ if (loading) return; // prevent double click
 
+  setLoading(true);
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/user/sign-in`,
@@ -43,6 +46,7 @@ const LoginPage = () => {
       console.error("Login failed:", err);
       alert("Invalid credentials or server error!");
     }
+    setLoading(false);
   };
 
   return (
@@ -115,11 +119,12 @@ const LoginPage = () => {
 
           {/* Submit */}
           <button
-            type="submit"
-            className="w-full py-3 rounded-lg !bg-green-600 text-white font-medium text-lg hover:!bg-green-700 transition mb-6"
-          >
-            Login
-          </button>
+  type="submit"
+  disabled={loading}
+  className="w-full py-3 rounded-lg !bg-green-600 text-white font-medium text-lg hover:bg-green-700 transition mb-6 disabled:bg-gray-400"
+>
+  {loading ? "Logging in..." : "Login"}
+</button>
         </form>
 
         {/* Footer */}
