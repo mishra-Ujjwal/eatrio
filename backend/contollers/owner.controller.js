@@ -34,24 +34,13 @@ export const registerOwner = async (req, res) => {
       "restaurant"
     );
 
-    // ✅ Always allow cross-domain cookie (for Render/Vercel frontend)
-    if (process.env.NODE_ENV === "production") {
-      res.cookie("ownerToken", token, {
-        httpOnly: true,
-        secure: true, // required for SameSite=None
-        sameSite: "None", // allow cross-site cookie
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        path: "/", // make cookie accessible across routes
-      });
-    } else {
-      // For localhost/dev
-      res.cookie("ownerToken", token, {
-        httpOnly: true,
-        sameSite: "Lax",
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        path: "/",
-      });
-    }
+    res.cookie("ownerToken", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+  path: "/",
+});
 
     res.json({
       success: true,
@@ -89,12 +78,12 @@ export const ownerLogin = async (req, res) => {
 
     // ✅ Correct secure cookie settings for Render (HTTPS)
     res.cookie("ownerToken", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // only secure in prod
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // allow cross-origin cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      path: "/", // ensure available to all routes
-    });
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  path: "/",
+});
 
     res.status(200).json({
       success: true,
@@ -109,13 +98,13 @@ export const ownerLogin = async (req, res) => {
 
 // ✅ Logout Owner
 export const logoutOwner = (req, res) => {
-  res
-    .cookie("ownerToken", "", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      expires: new Date(0),
-    })
+  res.cookie("ownerToken", "", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  expires: new Date(0),
+  path:"/"
+})
     .status(200)
     .json({ success: true, message: "Logged out successfully" });
 };
