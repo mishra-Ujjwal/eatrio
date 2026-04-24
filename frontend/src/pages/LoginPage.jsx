@@ -7,8 +7,8 @@ import { setUserData } from "../redux/userSlice";
 
 const LoginPage = () => {
   const [form, setForm] = useState({
-    email: "user@eatrio.com",
-    password: "user123",
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);

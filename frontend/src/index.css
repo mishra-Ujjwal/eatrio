@@ -15,7 +15,9 @@
 }
 html {
   scroll-padding-top: 40px; /* same or slightly more than your header height */
+  scroll-behavior: smooth;
 }
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -31,6 +33,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #f9fafb;
 }
 
 h1 {

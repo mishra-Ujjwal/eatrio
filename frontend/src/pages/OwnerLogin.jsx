@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setOwnerData } from "../redux/ownerSlice";
 
 const OwnerLogin = () => {
-  const [formData, setFormData] = useState({ email: "demo@eatrio.com", password: "demo123" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 

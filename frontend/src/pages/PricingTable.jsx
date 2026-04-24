@@ -48,40 +48,53 @@ const plans = [
 
 const PricingCard = ({ plan }) => {
   const navigate = useNavigate();
-  return(
-  <div className={
-      `relative flex flex-col rounded-2xl shadow-lg p-8 mx-2 mb-4 lg:mb-0 w-full max-w-sm
-      ${plan.highlighted ? 'bg-orange-600 text-white z-10 scale-105' : 'bg-white text-gray-900 border border-gray-200'}
-      transition-all duration-300`
-    }
-  >
-    {plan.badge &&
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-white w-2/3 text-center text-orange-600 font-bold py-1 px-6 rounded-full shadow-lg text-base">
-        {plan.badge}
+
+  return (
+    <div
+      className={`relative flex flex-col rounded-2xl p-8 mx-2 w-full max-w-sm
+      bg-white border border-gray-100
+      shadow-sm hover:shadow-2xl hover:-translate-y-2
+      transition duration-300
+      ${plan.highlighted ? "ring-2 ring-green-700 scale-105" : ""}`}
+    >
+      {plan.badge && (
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-green-100 text-green-700 font-semibold py-1 px-5 rounded-full text-sm">
+          {plan.badge}
+        </div>
+      )}
+
+      <div className="h-6" />
+
+      <div className="font-bold text-2xl mb-2 text-center text-gray-900">
+        {plan.title}
       </div>
-    }
-    <div className="h-6" />
-    <div className="font-bold text-2xl mb-3 text-center">{plan.title}</div>
-    <div className="text-4xl font-bold text-center leading-tight">{plan.price}</div>
-    <div className={`mb-4 text-lg text-center ${plan.highlighted ? 'text-white' : 'text-gray-500'}`}>{plan.subtitle}</div>
-    <ul className="mb-8 space-y-3">
-      {plan.features.map((feature, idx) => (
-        <li key={idx} className="flex items-center text-base">
-          <span className={`mr-2 text-xl font-semibold ${plan.highlighted ? 'text-white' : 'text-green-500'}`}>✓</span>
-          {feature}
-        </li>
-      ))}
-    </ul>
-    <button className={
-      `font-bold text-lg py-3 w-full rounded-full transition 
-       ${plan.highlighted ? 'bg-white text-orange-600 border-2 border-white hover:bg-orange-100 hover:text-orange-700' 
-                          : 'border-2 border-orange-600 text-orange-600 bg-white hover:!bg-orange-600 hover:text-white'}`
-    }onClick={()=>{navigate("/owner-signup")}}>
-      {plan.button}
-    </button>
-  </div>
-)}
-;
+
+      <div className="text-4xl font-bold text-center text-green-700">
+        {plan.price}
+      </div>
+
+      <div className="mb-4 text-center text-gray-500">
+        {plan.subtitle}
+      </div>
+
+      <ul className="mb-8 space-y-3">
+        {plan.features.map((feature, idx) => (
+          <li key={idx} className="flex items-center text-gray-600">
+            <span className="text-green-600 mr-2">✓</span>
+            {feature}
+          </li>
+        ))}
+      </ul>
+
+      <button
+        onClick={() => navigate("/owner-signup")}
+        className="!bg-green-800 text-white py-3 rounded-full font-semibold hover:!bg-green-700 hover:scale-105 transition"
+      >
+        {plan.button}
+      </button>
+    </div>
+  );
+};
 
 const PricingTable = () => (
   <section className=" w-full py-16 px-4 bg-white flex justify-center items-center min-h-screen">

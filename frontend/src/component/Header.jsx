@@ -1,84 +1,73 @@
 import React, { useState, useEffect } from "react";
-import { RiMenu3Line } from "react-icons/ri";
+import { Menu, X } from "lucide-react";
+
+const NAV_LINKS = ["home", "features", "pricing", "contact"];
 
 const Header = () => {
-  const [activeSection, setActiveSection] = useState("");
+  const [active, setActive] = useState("home");
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // Smooth scroll to section
-  const handleScroll = (id) => {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-      setActiveSection(id);
-    }
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      let current = "home";
+      NAV_LINKS.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 120) current = id;
+      });
+      setActive(current);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const goTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setOpen(false);
   };
 
   return (
-    <header className="bg-white fixed top-0 left-0 z-50 shadow-sm w-full py-2 lg:px-20 px-6 md:px-8 flex items-center justify-between">
-      {/* Logo */}
-      <div>
-        <img src="/logo1.png" alt="EatRio Logo" className="h-16" />
-      </div>
+    <>
+      <header className={`fixed w-full z-50 transition ${scrolled ? "bg-white/80 backdrop-blur" : ""}`}>
+        <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
 
-      {/* Navigation */}
-      <nav>
-        <ul className="hidden md:flex space-x-8 text-gray-800 font-medium">
-          <li>
-            <div
-              onClick={() => handleScroll("home")}
-              className={`transition cursor-pointer ${
-                activeSection === "home"
-                  ? "text-green-600 font-semibold"
-                  : "text-black hover:text-green-600"
-              }`}
-            >
-              Home
-            </div>
-          </li>
-          <li>
-            <div
-              onClick={() => handleScroll("features")}
-              className={`transition cursor-pointer ${
-                activeSection === "features"
-                  ? "text-green-600 font-semibold"
-                  : "text-black hover:text-green-600"
-              }`}
-            >
-              Features
-            </div>
-          </li>
-          <li>
-            <div
-              onClick={() => handleScroll("pricing")}
-              className={`transition cursor-pointer ${
-                activeSection === "pricing"
-                  ? "text-green-600 font-semibold"
-                  : "text-black hover:text-green-600"
-              }`}
-            >
-              Pricing
-            </div>
-          </li>
-          <li>
-            <div
-              onClick={() => handleScroll("contact")}
-              className={`transition cursor-pointer ${
-                activeSection === "contact"
-                  ? "text-green-600 font-semibold"
-                  : "text-black hover:text-green-600"
-              }`}
-            >
-              Contact
-            </div>
-          </li>
-        </ul>
+    <img src="/logo1.png" alt="" className="h-15 w-15" />
 
-        {/* Mobile Menu Icon */}
-        <div className="md:hidden cursor-pointer">
-          <RiMenu3Line size={23} />
+          <nav className="hidden md:flex gap-6">
+            {NAV_LINKS.map((id) => (
+              <div
+                key={id}
+                onClick={() => goTo(id)}
+                className={`capitalize font-medium transition border-none cursor-pointer ${
+                  active === id ? "!text-white !bg-green-600 border px-3 py-2 rounded-xl" : "border px-3 py-2 rounded-xl text-gray-600 hover:text-green-700"
+                }`}
+              >
+                {id}
+              </div>
+            ))}
+          </nav>
+
+          <button className="hidden md:block !bg-green-800 text-white px-5 py-2 rounded-full hover:scale-105 transition">
+            Get Started
+          </button>
+
+          <button className="md:hidden" onClick={() => setOpen(!open)}>
+            {open ? <X /> : <Menu />}
+          </button>
         </div>
-      </nav>
-    </header>
+      </header>
+
+      {open && (
+        <div className="fixed top-16 left-4 right-4 bg-white shadow-xl rounded-xl p-4 z-40">
+          {NAV_LINKS.map((id) => (
+            <div key={id} onClick={() => goTo(id)} className="py-2 capitalize text-gray-700">
+              {id}
+            </div>
+          ))}
+        </div>
+      )}
+    </>
   );
 };
 

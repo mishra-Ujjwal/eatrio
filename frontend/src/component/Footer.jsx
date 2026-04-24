@@ -1,56 +1,83 @@
 import React from "react";
+import { Mail, Phone, MapPin, Globe } from "lucide-react";
 
-const Footer = () => (
-  <footer className="bg-green-950" style={{
-    
-    color: "#ececec",
-    padding: "3rem 2rem 2rem 2rem",
-    fontSize: "1.1rem"
-  }}>
-    <div style={{
-      display: "flex",
-      flexWrap: "wrap",
-      maxWidth: 1200,
-      margin: "0 auto",
-      alignItems: "flex-start",
-      justifyContent: "space-between"
-    }}>
-      <div style={{ flex: "1 1 260px", marginBottom: 32 }}>
-        <div className="flex items-center gap-2" style={{ fontWeight: 700, fontSize: 28, marginBottom: 12 }}>
-         Eatrio
+const Footer = () => {
+  return (
+    <footer className="bg-[#f8fafc] border-t border-gray-200 pt-16 pb-8 px-6">
+
+      <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-10">
+
+        {/* LOGO + DESC */}
+        <div>
+          <div className="flex items-center gap-3 mb-4">
+            {/* Replace with your logo path */}
+            <img src="/logo1.png" alt="Eatrio Logo" className="w-10 h-10 object-contain" />
+
+          </div>
+
+          <p className="text-gray-600 text-sm leading-relaxed">
+            Revolutionizing food court operations with smart digital ordering
+            solutions built for speed and simplicity.
+          </p>
         </div>
-        <div style={{ color: "#bdbdbd", fontSize: 18, marginBottom: 16, maxWidth: 350 }}>
-          Revolutionizing food court operations with smart digital ordering solutions.
+
+        {/* PRODUCT */}
+        <div>
+          <h3 className="font-semibold text-gray-900 mb-4">Product</h3>
+          <ul className="space-y-2 text-gray-600 text-sm">
+            <li className="hover:text-green-700 cursor-pointer transition">Features</li>
+            <li className="hover:text-green-700 cursor-pointer transition">Pricing</li>
+            <li className="hover:text-green-700 cursor-pointer transition">Demo</li>
+            <li className="hover:text-green-700 cursor-pointer transition">API</li>
+          </ul>
         </div>
-       
+
+        {/* SUPPORT */}
+        <div>
+          <h3 className="font-semibold text-gray-900 mb-4">Support</h3>
+          <ul className="space-y-2 text-gray-600 text-sm">
+            <li className="hover:text-green-700 cursor-pointer transition">Help Center</li>
+            <li className="hover:text-green-700 cursor-pointer transition">Documentation</li>
+            <li className="hover:text-green-700 cursor-pointer transition">Contact Us</li>
+            <li className="hover:text-green-700 cursor-pointer transition">System Status</li>
+          </ul>
+        </div>
+
+        {/* CONTACT */}
+        <div>
+          <h3 className="font-semibold text-gray-900 mb-4">Contact</h3>
+          <ul className="space-y-3 text-gray-600 text-sm">
+            <li className="flex items-center gap-2 hover:text-green-700 transition">
+              <Mail size={16} /> support@eatrio.com
+            </li>
+            <li className="flex items-center gap-2 hover:text-green-700 transition">
+              <Phone size={16} /> +91 770188 3014
+            </li>
+            <li className="flex items-center gap-2 hover:text-green-700 transition">
+              <MapPin size={16} /> Delhi, India
+            </li>
+            <li className="flex items-center gap-2 hover:text-green-700 transition">
+              <Globe size={16} /> 24/7 Support
+            </li>
+          </ul>
+        </div>
+
       </div>
-      <div style={{ flex: "1 1 160px", marginBottom: 32 }}>
-        <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 14 }}>Product</div>
-        <div>Features</div>
-        <div>Pricing</div>
-        <div>Demo</div>
-        <div>API</div>
+
+      {/* Divider */}
+      <div className="max-w-6xl mx-auto mt-12 border-t border-gray-200 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 gap-3">
+
+        <span>© 2025 Eatrio. All rights reserved.</span>
+
+        <div className="flex gap-4">
+          <span className="hover:text-green-700 cursor-pointer transition">Privacy</span>
+          <span className="hover:text-green-700 cursor-pointer transition">Terms</span>
+        </div>
+
       </div>
-      <div style={{ flex: "1 1 210px", marginBottom: 32 }}>
-        <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 14 }}>Support</div>
-        <div>Help Center</div>
-        <div>Documentation</div>
-        <div>Contact Us</div>
-        <div>System Status</div>
-      </div>
-      <div style={{ flex: "1 1 220px", marginBottom: 32 }}>
-        <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 14 }}>Contact Info</div>
-        <div><span role="img" aria-label="email">📧</span> support@eatrio.com</div>
-        <div><span role="img" aria-label="phone">📞</span> +91 770188 3014</div>
-        <div><span role="img" aria-label="location">📍</span> Delhi, India</div>
-        <div><span role="img" aria-label="support">🌐</span> 24/7 Support</div>
-      </div>
-    </div>
-    <hr style={{ border: "none", borderTop: "1px solid #232A36", margin: "2.5rem 0 1rem 0" }}/>
-    <div style={{ textAlign: "center", color: "#bdbdbd", fontSize: 16 }}>
-      © 2025 Eatrio. All rights reserved. | Powered by Eatrio
-    </div>
-  </footer>
-);
+
+    </footer>
+  );
+};
 
 export default Footer;
